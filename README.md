@@ -1,14 +1,18 @@
-# PVAmpliconFinder
+## PVAmpliconFinder
 
 **PVampliconFinder** is a data analysis workflow designed to rapidly identify and classify known and potentially new *papilliomaviridae* sequences from amplicon deep-sequencing with degenerated papillomavirus (PV) primers.
 
-## Description
+# PyVAmpliconFinder
+
+**PyVampliconFinder** is developped to adapt the use of the pipeline to the polyomaviridae family. 
+
+## First description
 
 PVampliconFinder is based on alignment similarity metrics, but also consider molecular evolution time for an improved identification and taxonomic classification of novel PVs. The final output of the tool includes a list of fully characterized putatively new papillomaviriade sequences, as well as graphical representations of relative abundance of the virome sequence diversity in the tested samples. 
 
 ## Prerequisites
 
-The PVampliconFinder workflow is designed for the analysis of sequencing reads generated from **paired-end sequencing** of DNA amplified using degenerated primers targeting specifically the L1 sequence of papillomaviruses ([Chouhy *et al.*, 2010](https://www.ncbi.nlm.nih.gov/pubmed/19948351),[Forslund *et al.*, 1999](https://www.ncbi.nlm.nih.gov/pubmed/10501499),[Forslund *et al.*, 2003](https://www.ncbi.nlm.nih.gov/pubmed/12798239)).
+The workflow is designed for the analysis of sequencing reads generated from **paired-end sequencing** of DNA amplified using degenerated primers targeting specifically the L1 sequence of papillomaviruses ([Chouhy *et al.*, 2010](https://www.ncbi.nlm.nih.gov/pubmed/19948351),[Forslund *et al.*, 1999](https://www.ncbi.nlm.nih.gov/pubmed/10501499),[Forslund *et al.*, 2003](https://www.ncbi.nlm.nih.gov/pubmed/12798239)).
 
 ## Installation
 
@@ -34,7 +38,7 @@ Description :
 
 ### Manual installation
 
-The list of tools used by PVAmpliconFinder can be manually downloaded and installed, and corresponding **executable must be present in the [PATH environment variable](http://www.linfo.org/path_env_var.html)**.
+The list of tools used by PyVAmpliconFinder can be manually downloaded and installed, and corresponding **executable must be present in the [PATH environment variable](http://www.linfo.org/path_env_var.html)**.
 
 > Please note that [PaPaRa](https://cme.h-its.org/exelixis/web/software/papara/index.html) binary file must be named "papara".
 
@@ -54,7 +58,7 @@ The list of tools used by PVAmpliconFinder can be manually downloaded and instal
 
 ### NCBI databases
 
-PVAmpliconFinder need the **nt** and **taxdb** NCBI databases to work properly. You can find thoses databases at the following ftp adress : ftp://ftp.ncbi.nlm.nih.gov/blast/db/. Note that the taxonomy file must be correctly located.
+PyVAmpliconFinder will need the **nt** and **taxdb** NCBI databases to work properly. You can find thoses databases at the following ftp adress : ftp://ftp.ncbi.nlm.nih.gov/blast/db/. Note that the taxonomy file must be correctly located.
 
 It is advised to use the NCBI script [update_blastdb.pl](https://www.ncbi.nlm.nih.gov/IEB/ToolBox/CPP_DOC/lxr/source/src/app/blast/update_blastdb.pl) to facilitate the installation of the databases.
 
@@ -63,7 +67,6 @@ It is advised to use the NCBI script [update_blastdb.pl](https://www.ncbi.nlm.ni
 ### List of other databases
 
 - [ncbitax2lin](https://github.com/zyxue/ncbitax2lin) 
-- [PaVE](https://pave.niaid.nih.gov/)
 
 ## Input
   | Type      | Description     |
@@ -128,20 +131,24 @@ sh amplicon_processing_HPV_Vlast.sh [-h] [-t threads] [-b "nt" database] [-f inf
   | Alexis Robitaille    | robitaillea@students.iarc.fr | Developer to contact for support (link to specific gitter chatroom) |
   | Magali Olivier    | olivierm@iarc.fr |  |
   | Massimo Tommasino    | tommasinom@iarc.fr |  |
+  | Eugénie Lohmann    | lohmanne@students.iarc.fr |  |
 
 ## Versioning
 
-Version 1.0
+Version ...
 
 ## Authors
 
 * **Alexis Robitaille** - [IARC bioinformatic platform](https://github.com/IARCbioinfo)
+* **Eugénie Lohmann** - [IARC ICB group](https://github.com/Eugloh/)
 
 ## License
 
 This project is licensed under ...
 
 ## Acknowledgments
+
+Original version [here](https://github.com/IARCbioinfo/PVAmpliconFinder)
 
 ## References
 
