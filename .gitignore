@@ -7,3 +7,6 @@ scripts/*.out
 scripts/raxml/*
 databases/PaVE
 raxml/old/*
+scripts/raxml/*
+data
+results
