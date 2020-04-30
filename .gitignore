@@ -10,3 +10,6 @@ raxml/old/*
 scripts/raxml/*
 data
 results
+*.err
+*.out
+batch_output/*

@@ -293,23 +293,23 @@ sub readinfofile{
 
 #~ cat <(sed -e '1d' download_animal_RefClone_*.csv | awk -v OFS="\t" -F"\t" '{print $1, $9, $3}') <(sed -e '1d' download_human_RefClone_*.csv | awk -v OFS="\t" -F"\t" '{print $1, $5, $2}') > pave_table.txt
 
-my $table="$dirname/raxml/pave_table.txt";
+my $table="$dirname/raxml/PyV_table3.txt";
 
 my %hacctohpv=();
 my %hacctotax=();
 my %hhpvtotax=();
-open(T, $table) or die "$! : $table\n";	#HPV1	V01116	Mupapillomavirus 1
+open(T, $table) or die "$! : $table\n";	#NC_022519	AelPyV1	Betapolyomavirus
 while(<T>){
 	chomp($_);
 	my @tab=split(/\t/,$_);
 	if((defined($tab[1])) && $tab[1]!~/^\s*$/){
-		$hacctohpv{$tab[1]}=$tab[0];		#	BPV7	DQ217793	Dyoxipapillomavirus 1
+		$hacctohpv{$tab[1]}=$tab[0];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
 	}
 	if((defined($tab[2])) && $tab[2]!~/^\s*$/){
-		$hacctotax{$tab[1]}=$tab[2];		#	BPV7	DQ217793	Dyoxipapillomavirus 1
+		$hacctotax{$tab[1]}=$tab[2];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
 	}
 	if((defined($tab[0])) && $tab[0]!~/^\s*$/){
-		$hhpvtotax{$tab[0]}=$tab[2];		#	BPV7	DQ217793	Dyoxipapillomavirus 1
+		$hhpvtotax{$tab[0]}=$tab[2];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
 	}
 }
 close(T);
@@ -453,7 +453,7 @@ sub loadblastresult{
 			$reads{$pool}+=$reads;
 			
 			##	Viruses
-			if($kingdom=~/Viruses/i && $sname=~/papilloma/i){
+			if($kingdom=~/Viruses/i && $sname=~/polyoma/i){
 				my $virusname="";
 				$virusname=$title;
 				
@@ -772,7 +772,7 @@ while(my $row = $csv->getline ($io)){
 	else{
 		$taxid2gen{$tab[0]}="Unclassified";
 	}
-	if($tab[7]!~/^\s*$/ && $tab[7]!~/^Human papillomavirus$/i){
+	if($tab[7]!~/^\s*$/ && $tab[7]!~/^Human polyomavirus$/i){
 		$taxid2spe{$tab[0]}=$tab[7];
 	}
 	else{
@@ -1490,7 +1490,8 @@ sub concat_sequence{
 ##	BLASTN DATABASE DEFINITION	##
 ##################################
 my $fac = Bio::Tools::Run::StandAloneBlastPlus->new(
-   -db_data => $dirname.'/databases/PaVE/PaVE.fasta',
+   #-db_data => $dirname.'/databases/PaVE/PaVE.fasta', #References.fasta
+   -db_data => $dirname.'/databases/References.fasta',
    -create => 1,
    -alphabet=>'dna'
 		);
@@ -2087,18 +2088,18 @@ else{
 		##	New
 		chdir "$whereiam/raxml/new";
 
-		`papara -t $dirname/raxml/L1_All_genome_NUC_GTRGAMMA_tree_newick.nwk -s $dirname/raxml/L1_All_genome_NUC_alignment.phylip -q $newfasta -j $threads`;
+		`papara -t $dirname/raxml/References_align_muscle-45857.nwk -s $dirname/raxml/References_align_muscle.phylip -q $newfasta -j $threads`;
 
-		`raxmlHPC-PTHREADS-AVX -f v -s papara_alignment.default -t $dirname/raxml/L1_All_genome_NUC_GTRGAMMA_tree_newick.nwk -m GTRGAMMA -n new -T $threads --epa-keep-placements=1`;
+		`raxmlHPC-PTHREADS-AVX -f v -s papara_alignment.default -t $dirname/raxml/References_align_muscle-45857.nwk -m GTRGAMMA -n new -T $threads --epa-keep-placements=1`;
 	}
 
 	if($bol_known_empty eq "F"){
 		##	Known
 		chdir "$whereiam/raxml/known";
 
-		`papara -t $dirname/raxml/L1_All_genome_NUC_GTRGAMMA_tree_newick.nwk -s $dirname/raxml/L1_All_genome_NUC_alignment.phylip -q $knownfasta -j $threads`;
+		`papara -t $dirname/raxml/References_align_muscle-45857.nwk -s $dirname/raxml/References_align_muscle.phylip -q $knownfasta -j $threads`;
 
-		`raxmlHPC-PTHREADS-AVX -f v -s papara_alignment.default -t $dirname/raxml/L1_All_genome_NUC_GTRGAMMA_tree_newick.nwk -m GTRGAMMA -n known -T $threads --epa-keep-placements=1`;
+		`raxmlHPC-PTHREADS-AVX -f v -s papara_alignment.default -t $dirname/raxml/References_align_muscle-45857.nwk -m GTRGAMMA -n known -T $threads --epa-keep-placements=1`;
 	}
 
 	chdir "$whereiam/raxml";
@@ -2397,10 +2398,10 @@ sub treatputative{
 		
 		my $genus="";
 		#~ print $querytax{$idselected}." rax\n";
-		if($querytax{$idselected}=~/^(\S+)papillomavirus (\d+)/){
+		if($querytax{$idselected}=~/^(\S+)polyomavirus (\d+)/){
 			$genus=$1;
 		}
-		elsif($querytax{$idselected}=~/(\S+)papillomavirus/){
+		elsif($querytax{$idselected}=~/(\S+)polyomavirus/){
 			if($1=~/alpha/i or $1=~/beta/i or $1=~/gamma/i or $1=~/mu/i or $1=~/nu/i){
 				$genus="Unreferenced";
 			}
@@ -2415,10 +2416,10 @@ sub treatputative{
 		
 		my $genus_blastn="";
 		#~ print $blastn_species." blast\n";
-		if($blastn_species=~/(\S+)papillomavirus (\d+)/){
+		if($blastn_species=~/(\S+)polyomavirus (\d+)/){
 			$genus_blastn=$1;
 		}
-		elsif($blastn_species=~/(\S+)papillomavirus/){
+		elsif($blastn_species=~/(\S+)polyomavirus/){
 			if($1=~/alpha/i or $1=~/beta/i or $1=~/gamma/i or $1=~/mu/i or $1=~/nu/i){
 				$genus_blastn="Unreferenced";
 			}
@@ -3723,25 +3724,22 @@ sub getgenus{
 	my $hpvname=shift;
 	my $genus="";
 	if($hpvname=~/^alpha/i){
-		$genus="Alphapapillomavirus";
+		$genus="Alphapolyomavirus";
 	}
 	elsif($hpvname=~/^beta/i){
-		$genus="Betapapillomavirus";
+		$genus="Betapolyomavirus";
 	}
 	elsif($hpvname=~/^gamma/i){
-		$genus="Gammapapillomavirus";
+		$genus="Gammapolyomavirus";
 	}
-	elsif($hpvname=~/^mu/i){
-		$genus="Mupapillomavirus";
-	}
-	elsif($hpvname=~/^nu/i){
-		$genus="Nupapillomavirus";
+	elsif($hpvname=~/^delta/i){
+		$genus="Deltapolyomavirus";
 	}
 	elsif($hpvname=~/^unclass/i){
-		$genus="Unclassified";
+		$genus="Unassigned";
 	}
 	else{
-		$genus="Non-human papillomavirus";
+		$genus="Non-human polyomavirus";
 	}
 	return($genus);
 }
