@@ -128,6 +128,12 @@ fi
 
 mkdir -p $working_dir;
 
+echo ${blastdir};
+echo ${working_dir};
+echo ${suffix};
+echo ${outputdir};
+echo ${threads};
+echo ${info};
 
 ##################
 ##	Log file	##
@@ -198,37 +204,37 @@ cd ${working_dir};
 #echo -e "##########################################\n##\tRemove adapter sequence\t\t##\n##########################################" >> ${logfile};
 echo -e "##########################################\n##\tRemove adapter sequence\t\t##\n##########################################";
 
-if [ ! -d "fastq_filtered" ]
+if [ -d "fastq_filtered" ]
 then
 
-	mkdir ${trim_galore} 2>> ${logfile};
+	#mkdir ${trim_galore} 2>> ${logfile};
 
-	cd ${fastq_dir};
+	#cd ${fastq_dir};
 	
 	##	Trimming TrimGalore!
-	find . -name "${suffix}*R1*.fastq" -o -name "${suffix}*R1*.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'r2="${0/R1/R2}"; echo Pair : ${0} $r2; trim_galore --fastqc --length 30 --paired --retain_unpaired -o '${trim_galore}' ${0} $r2 &>>'${logfile}';';
+	find . -name "${suffix}*R1*.fastq" -o -name "${suffix}*R1*.fq" | echo xargs --max-args=1 --max-procs=${threads} -- bash -c 'r2="${0/R1/R2}"; echo Pair : ${0} $r2; trim_galore --fastqc --length 30 --paired --retain_unpaired -o '${trim_galore}' ${0} $r2 &>>'${logfile}';';
 	
 	cd ${trim_galore};
 	
 	##	MultiQC
-	multiqc . 2>> $logfile
+	#multiqc . 2>> $logfile
 	
-	ln -s ${trim_galore}"/multiqc_report.html" ${working_dir}"/multiQC_report_on_filtered.html";
+	#ln -s ${trim_galore}"/multiqc_report.html" ${working_dir}"/multiQC_report_on_filtered.html";
 	
-	mkdir ${fastq_filtered} 2>> ${logfile};
+	#mkdir ${fastq_filtered} 2>> ${logfile};
 	
 	#~ find . -name "${suffix}*val_1.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'r2="${0/val_/unpaired_}"; cat $r2 >> ${0}; mv ${0} '${fastq_filtered}';'
 	
 	#~ find . -name "${suffix}*val_2.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'r2="${0/val_/unpaired_}"; cat $r2 >> ${0}; mv ${0} '${fastq_filtered}';'
 	
-	find . -name "${suffix}*val_1.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'mv ${0} '${fastq_filtered}';'
+	find . -name "${suffix}*val_1.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'echo mv ${0} '${fastq_filtered}';'
 	
-	find . -name "${suffix}*val_2.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'mv ${0} '${fastq_filtered}';'
+	find . -name "${suffix}*val_2.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'echo mv ${0} '${fastq_filtered}';'
 	
 	cd ${fastq_filtered};
 	
-	find . -name "${suffix}*R1*.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'mv ${0} $(basename "${0/_val_1.fq/}").fq'
-	find . -name "${suffix}*R2*.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'mv ${0} $(basename "${0/_val_2.fq/}").fq'
+	find . -name "${suffix}*R1*.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'echo mv ${0} $(basename "${0/_val_1.fq/}").fq'
+	find . -name "${suffix}*R2*.fq" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'echo mv ${0} $(basename "${0/_val_2.fq/}").fq'
 	
 	echo "Done";
 else

@@ -1,12 +1,12 @@
 #!/usr/bin/bash
-#SBATCH -J "megablast"
-#SBATCH -A "NGS2_Luisa"
+#SBATCH -J "PyVAmplicon"
+#SBATCH -A "DEEP_sample"
 #SBATCH -c 28					   ### number of files to treat 
 #SBATCH --mem=16G 				   ### blastn purpose
 #SBATCH --mail-user="lohmanne@students.iarc.fr"
 #SBATCH --mail-type=ALL
-#SBATCH	--output=PVAF-T1-%j.out                    ### %j will be replaced by the batch job id
-#SBATCH --error=PVAF-T1-%j.err                     ### %j will be replaced by the batch job id
+#SBATCH	--output=PyV-all-%j.out                    ### %j will be replaced by the batch job id
+#SBATCH --error=PyV-all-%j.err                     ### %j will be replaced by the batch job id
 
 uname -a
 echo starting job
@@ -18,9 +18,9 @@ source activate PVAmpliconFinder
 ./PyVAmpliconFinder_dev.sh \
 	 -b nt \
 	 -s NGSDEEP \
-	 -d data \
-	 -o results \
-	 -f data/InfoFile_Test \
+	 -d files \
+	 -o all \
+	 -f infofile.csv \
 	 -t 28
 date
 echo ok
