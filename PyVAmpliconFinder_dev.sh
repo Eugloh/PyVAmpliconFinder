@@ -343,14 +343,14 @@ cd ${dir};
 
 if [ ! -d ${working_dir}"/analysis_new" ]
 then
-	#chmod +x $BASEDIR/PyVAmpliconFinder_step2_dev.pl;
-	echo ${blastdir};
-	echo ${working_dir};
-	echo ${suffix};
-	echo ${outputdir};
-	echo ${threads};
-	echo ${info};
-	#perl $BASEDIR/PyVAmpliconFinder_step2_dev.pl -i ${blastdir} -o ${working_dir} -s ${suffix} -d ${outputdir} -t ${threads} -f ${info};
+	chmod +x $BASEDIR/PyVAmpliconFinder_step2_dev.pl;
+	#echo ${blastdir};
+	#echo ${working_dir};
+	#echo ${suffix};
+	#echo ${outputdir};
+	#echo ${threads};
+	#echo ${info};
+	perl $BASEDIR/PyVAmpliconFinder_step2_dev.pl -i ${blastdir} -o ${working_dir} -s ${suffix} -d ${outputdir} -t ${threads} -f ${info};
 else
 	echo -e "Advanced analysis already done";
 	#echo -e "Advanced analysis already done" >> $logfile;	

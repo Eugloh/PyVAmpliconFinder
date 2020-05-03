@@ -34,7 +34,8 @@ use Bio::Seq;
 use Text::CSV;
 use Cwd;
 use Bio::TreeIO;
-
+use strict; 
+BEGIN { our $start_run = time(); }
 ##############
 ##	Options	##
 ##############
@@ -96,8 +97,10 @@ if ( $opts{h} ) {
 
 
 my $whereiam=getcwd;		##	where the analysis is done
+# Cwd library, determining the pathname of the current working directory : ensure portability
 
 my $dirname = dirname(__FILE__);	# where the script is located
+# __FILE__ A special token that returns the name of the file in which it occurs. 
 
 if($inputdirfasta!~/^\//){
 	$inputdirfasta=$whereiam."/".$inputdirfasta;
@@ -113,6 +116,7 @@ if($outputdir!~/^\//){
 ##############
 ##	Usage	##
 ##############
+# Le mot clef sub permet de définir des fonctions en Perl.
 sub print_usage {
 	printf "
 analysis_summary.pl [-h] [-f infos_file] -i input_dir_blast -o output_dir -s suffix -d input_dir_fasta -t threads_number
@@ -153,6 +157,17 @@ my $boolean_infofile="true";
 ##########################################
 ##	Check the integrity of info file	##
 ##########################################
+
+# ne : String inequality (!= is numeric inequality). 
+# chomp() utilisée dans la manipulation de chaines de caracteres : supprime le dernier symbole \n 
+
+# inputdirblast : result blast 
+# inputdirfasta : result vsearch 
+
+# \d is shorthand for [0-9]
+# -- auto decrement operators 
+
+
 if($infos ne ""){
 	my $cptlineinfo=`wc -l $infos | cut -d' ' -f 1`;chomp($cptlineinfo);
 	my $cptlineblast=`ls -l $inputdirblast/"$suffix"*.blast | wc -l`;chomp($cptlineblast);
@@ -235,6 +250,9 @@ foreach my $p (sort @pools){
 	$cptpoolsid++;
 }
 
+# manipuler des tableaux avec perl 
+# shift : La fonction shift déplace l'ensemble des éléments d'un tableau vers la gauche
+# push : La fonction push peut ajouter une ou plusieurs valeurs à la fin d'un tableau
 sub readinfofile{
 	my $file=shift;
 	my %primer=();
@@ -295,6 +313,8 @@ sub readinfofile{
 
 my $table="$dirname/raxml/PyV_table3.txt";
 
+# \s match white space 
+
 my %hacctohpv=();
 my %hacctotax=();
 my %hhpvtotax=();
@@ -311,9 +331,13 @@ while(<T>){
 	if((defined($tab[0])) && $tab[0]!~/^\s*$/){
 		$hhpvtotax{$tab[0]}=$tab[2];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
 	}
+
 }
 close(T);
 
+#print %hacctohpv; # el de la 2e colonne de pyv table
+#print %hacctotax; # melange de la 2e et 3e colonne 
+#print %hhpvtotax; # melange de la 1e et 3e colonne 
 
 my %htype;#number of reads by pool and organism category - key = pool & organism type
 my %hhpv;#number of reads by pool and HPV category - key = tissue - VIRUS type
@@ -385,13 +409,14 @@ sub loadblastresult{
 		my $tissu="";
 		chomp($file);
 		my ($filename, $directories, $suffix) = fileparse($file, qr/\.[^.]*/);
+		# fileparse : These routines allow you to parse file paths into their directory, filename and suffix.  fileparse($fullname,@suffixlist)
 		
 		##	Not consider if empty file
 		if(!(exists($consider{$filename}))){
 			next;
 		}
 		
-		print $filename."\n";
+		print $filename."\n"; # NGSDEEP_S_S2_L001 
 		my $sampleName = $filename;
 		
 		open(F1, $file) or die "$!: $file\n";
@@ -594,9 +619,9 @@ if($boolean_infofile eq "true"){
 for my $p (sort keys %htype){
 	
 	my $othersreads=$htype{$p}{'human'}+$htype{$p}{'bacteria'}+$htype{$p}{'other'};
-	#~ print $othersreads." other\n";
+	# print $othersreads." other\n"; #153 other
 	my $allreads=$othersreads+$htype{$p}{'VIRUS'}+$htype{$p}{'newVIRUS'};
-	#~ print $allreads." all\n";
+	# print $allreads." all\n"; # 1265130 all
 	my $virusreads=$htype{$p}{'VIRUS'}+$htype{$p}{'newVIRUS'};
 	my $fracnew;
 	if($virusreads == 0){
@@ -605,7 +630,7 @@ for my $p (sort keys %htype){
 	else{
 		$fracnew=nearest(.001,($htype{$p}{'newVIRUS'}/$virusreads)*100)
 	}
-	#~ print $virusreads." virus\n";
+	# print $virusreads." virus\n"; # 1264977 virus
 	
 	if($allreads!=$reads{$p}){
 		print "Error\n";
@@ -674,6 +699,7 @@ foreach my $pool (@pools){
 	$hprimknown{$primer{$pool}}+=scalar(@{$hknown{$pool}});
 	$hprimother{$primer{$pool}}+=scalar(@{$hother{$pool}});
 }
+
 ##############################################################
 ##	Table 3 - Sequencing statistics per primers & tissue	##
 ##############################################################
@@ -745,6 +771,7 @@ my %taxid2spe=();
 my %taxid2fam=();
 
 my $lineage="$dirname/databases/lineages/lineagesVirus.csv";		
+print $lineage."\n";
 
 my $csv = Text::CSV->new ( { binary => 1 } ) or die "Cannot use CSV: ".Text::CSV->error_diag ();
 
@@ -753,36 +780,44 @@ open my $io, "<", $lineage or die "$!: $lineage";
 while(my $row = $csv->getline ($io)){
 	chomp($row);
 	my @tab = @$row;
-	chomp($tab[0]);	#taxid
-	chomp($tab[5]);	#family
-	chomp($tab[6]);	#genus
+	chomp($tab[0]);	#taxid number 
+	chomp($tab[5]);	#family polymaviridae
+	chomp($tab[6]);	#genus polyomavirus
 	chomp($tab[7]);	#species
 	chomp($tab[14]);	#complement info
 	
+
 	if($tab[5]!~/^\s*$/){
 		$taxid2fam{$tab[0]}=$tab[5];
 	}
 	else{
-		$taxid2fam{$tab[0]}="Unclassified";
+		$taxid2fam{$tab[0]}="unclassified";
 	}
 	
 	if($tab[6]!~/^\s*$/){
 		$taxid2gen{$tab[0]}=$tab[6];
 	}
 	else{
-		$taxid2gen{$tab[0]}="Unclassified";
+		$taxid2gen{$tab[0]}="unclassified";
 	}
 	if($tab[7]!~/^\s*$/ && $tab[7]!~/^Human polyomavirus$/i){
 		$taxid2spe{$tab[0]}=$tab[7];
 	}
 	else{
-		$taxid2spe{$tab[0]}="Unclassified";
+		$taxid2spe{$tab[0]}="unclassified";
 	}
 }
 
 close($io);
 
+print "step read lineage complete \n";
+my $end_run = time();
+my $run_time = $end_run - our $start_run;
+print "Job took $run_time seconds\n";
+
+
 my %hoverall=();	# {Family}{Genus}{Species}{virusname}{tissu}=nb reads
+
 
 foreach my $pool (sort keys %htarget){		#HERE sorted par sample name 
 							
@@ -792,10 +827,12 @@ foreach my $pool (sort keys %htarget){		#HERE sorted par sample name
 			#~ exit;
 		}
 		
+		# defined : Returns a Boolean value telling whether EXPR has a value other than the undefined value undef 
+		print $taxid2gen{$virusname2taxid{$virusname}}."\n";
 		if(!(defined($taxid2gen{$virusname2taxid{$virusname}}))){
-			print $virusname."\n";
-			print $virusname2taxid{$virusname}."\n";
-			exit;
+			print "ceci est un test ".$virusname."\n";
+			print "ceci est un test ".$virusname2taxid{$virusname}."\n";
+			exit; # le script sarrete là ? 
 		}
 		
 		my $genus=$taxid2gen{$virusname2taxid{$virusname}};
