@@ -770,7 +770,7 @@ my %taxid2gen=();
 my %taxid2spe=();
 my %taxid2fam=();
 
-my $lineage="$dirname/databases/lineages/lineagesVirus.csv";		
+my $lineage="$dirname/databases/lineages/ncbi_lineages-virus.csv";		
 print $lineage."\n";
 
 my $csv = Text::CSV->new ( { binary => 1 } ) or die "Cannot use CSV: ".Text::CSV->error_diag ();
@@ -828,7 +828,7 @@ foreach my $pool (sort keys %htarget){		#HERE sorted par sample name
 		}
 		
 		# defined : Returns a Boolean value telling whether EXPR has a value other than the undefined value undef 
-		print $taxid2gen{$virusname2taxid{$virusname}}."\n";
+
 		if(!(defined($taxid2gen{$virusname2taxid{$virusname}}))){
 			print "ceci est un test ".$virusname."\n";
 			print "ceci est un test ".$virusname2taxid{$virusname}."\n";
