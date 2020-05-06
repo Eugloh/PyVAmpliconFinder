@@ -18,24 +18,24 @@
 #-t	number of threads	{threads}
 #-h	show this help
 
-#perl PyVAmpliconFinder_step2_dev.pl \
-#	-i /home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/results/blast_result \
-#	-o /home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/results \
-#	-s NGSDEEP \
-#	-d /home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/results/vsearch \
-#	-t 1 \
-#	-f /home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/data/InfoFile_Test
+perl PyVAmpliconFinder_step2_dev.pl \
+	-i /home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/results/blast_result \
+	-o /home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/results \
+	-s NGSDEEP \
+	-d /home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/results/vsearch \
+	-t 1 \
+	-f /home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/data/InfoFile_Test
 
 # -i inputdirblast 
 # -d inputdirfasta
 
-perl PyVAmpliconFinder_step2_dev.pl \
-	-i results/blast_result \
-	-o results \
-	-s NGSDEEP \
-	-d results/vsearch \
-	-t 1 \
-	-f data/InfoFile_Test
+#perl PyVAmpliconFinder_step2_dev.pl \
+#	-i results/blast_result \
+#	-o results \
+#	-s NGSDEEP \
+#	-d results/vsearch \
+#	-t 1 \
+#	-f data/InfoFile_Test
 
 #inputdirblast='results/blast_result'
 #inputdirfasta='results/vsearch'

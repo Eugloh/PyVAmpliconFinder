@@ -492,7 +492,7 @@ sub loadblastresult{
 				$clusttissue{$tissu{$pool}}+=1;
 				
 				#~ if($percid>=90.0){
-				if($percid>=90.0){							#Test thershold 5%
+				if($percid>=95.0){							#Test thershold 5%
 					
 					$htype{$pool}{'VIRUS'}+=$reads;
 					$hprimer{$primer{$pool}}{'VIRUS'}+=$reads;
@@ -791,20 +791,20 @@ while(my $row = $csv->getline ($io)){
 		$taxid2fam{$tab[0]}=$tab[5];
 	}
 	else{
-		$taxid2fam{$tab[0]}="unclassified";
+		$taxid2fam{$tab[0]}="Unclassified";
 	}
 	
 	if($tab[6]!~/^\s*$/){
 		$taxid2gen{$tab[0]}=$tab[6];
 	}
 	else{
-		$taxid2gen{$tab[0]}="unclassified";
+		$taxid2gen{$tab[0]}="Unclassified";
 	}
 	if($tab[7]!~/^\s*$/ && $tab[7]!~/^Human polyomavirus$/i){
 		$taxid2spe{$tab[0]}=$tab[7];
 	}
 	else{
-		$taxid2spe{$tab[0]}="unclassified";
+		$taxid2spe{$tab[0]}="Unclassified";
 	}
 }
 
@@ -830,9 +830,9 @@ foreach my $pool (sort keys %htarget){		#HERE sorted par sample name
 		# defined : Returns a Boolean value telling whether EXPR has a value other than the undefined value undef 
 
 		if(!(defined($taxid2gen{$virusname2taxid{$virusname}}))){
-			print "ceci est un test ".$virusname."\n";
-			print "ceci est un test ".$virusname2taxid{$virusname}."\n";
-			exit; # le script sarrete là ? 
+			print $virusname."\n";
+			print $virusname2taxid{$virusname}."\n";
+			exit; 
 		}
 		
 		my $genus=$taxid2gen{$virusname2taxid{$virusname}};
@@ -916,6 +916,7 @@ foreach my $pool (sort keys %htarget){		#HERE sorted par sample name
 	}
 }
 
+
 ##########################################
 ##	Table 5 - KNOWN virus family level	##
 ##########################################
@@ -943,6 +944,7 @@ foreach my $pool (sort keys %known){
 	}
 	print OUT "\n";
 }
+
 ##########################################
 ##	Table 6 - KNOWN virus genus level	##
 ##########################################
@@ -1287,6 +1289,7 @@ my @res=concat_sequence($output_new,$inputdirfasta);
 my %hdata=%{$res[0]};
 my %hseq=%{$res[1]};
 
+
 ##############
 ##	KNOWN	##
 ##############
@@ -1540,7 +1543,7 @@ my $tmp=$output_new."/tmp";
 mkdir $tmp;
 
 chdir $output_new;
-print "Create contigs NEW VIRUS\n";
+print "TEST Create contigs NEW VIRUS\n";
 my @aecrire=contig_build(\%hdata,\%hseq,$inputdirfasta,$tmp);
 
 ##############
