@@ -1544,7 +1544,7 @@ mkdir $tmp;
 
 chdir $output_new;
 print "TEST Create contigs NEW VIRUS\n";
-my @aecrire=contig_build(\%hdata,\%hseq,$inputdirfasta,$tmp);
+my @aecrire=contig_build(\%hdata,\%hseq,$inputdirfasta,$tmp); # SCRIPT S'ARRETE LA 
 
 ##############
 ##	KNOWN	##
@@ -1573,6 +1573,8 @@ sub contig_build{
 	my $inputdirfasta=shift;
 	my $tmpfun=shift;
 
+	print $inputdirfasta."\n";
+	print $tmpfun."\n";
 	my @aecrirefun=();
 
 	my $k=0;
@@ -1580,17 +1582,15 @@ sub contig_build{
 		##########################
 		##	Pour chaque POOL	##
 		##########################
-		
 		##Préparation du blastn
 		my $p=$pool;																##Transformer Pool en pool car nom de fichier uniquement en minuscule
-				 
+		print $p."\n";		 
 		foreach my $title (keys %$hdatafun){
 			##########################
 			##	Pour chaque cluster	##
 			##########################		
-			
+			print "$k\n"; # 0 
 			if(defined($$hseqfun{$title}{$pool})){	
-				
 				##############################################
 				##	Si plusieurs sequences dans ce cluster	##
 				##############################################
@@ -1599,6 +1599,7 @@ sub contig_build{
 				my $s=1;
 				open(TMP, ">".$tmpfun."/$k$k$k.fasta") or die "$!: $k$k$k.fasta\n";
 				foreach my $seq (@{$$hseqfun{$title}{$pool}}){
+
 					my @tabtmp=split(/\|/,$seq);
 					my $idtmp=$tabtmp[0];
 					my $l=$tabtmp[1];
@@ -1885,22 +1886,26 @@ sub contig_build{
 				##	Need to be intialized for each sequence otherwise it's finish when it's raised the end of the file
 				my $in=Bio::SeqIO->new( -file => $inputdirfasta."/".$p.".fasta",		##Initialisation du fichier contenant les contigs
 				 -format => 'Fasta');
-				
 				my $abundance=nearest(.0001,((${$$hdatafun{$title}{$pool}}[3]/$reads{$pool})*100));
+				# print "abondance ".$abundance."\n"; # abondance 0.0016
 				my $perc_dis=nearest(.01,(100.00-(${$$hdatafun{$title}{$pool}}[1])));
+				# print "perc dis ".$perc_dis."\n"; # perc dis 5.45
 				my $len = length(${$$hdatafun{$title}{$pool}}[9]);
+				# print "len ".$len."\n"; # len 63
 				
 				my $hpvclosest="";
 				my $classification="";
 				my @start_stop_len_hit=();
+
+				####################################################################################################################################
+				##blastn HPV #######################################################################################################################
+				####################################################################################################################################
 				
-				##blastn HPV
 				while (my $seq = $in->next_seq){
 				
 					my $id=$seq->display_id();
-					
+					print "id ".$id."\n";
 					if($id eq ${$$hdatafun{$title}{$pool}}[10]){
-						#print $id."\n";
 						
 						my $out="$tmpfun/$id.blast";
 						
@@ -2012,8 +2017,9 @@ sub contig_build{
 					}
 				}
 				my $infoalign=join("/",@start_stop_len_hit);
-				
+				#print "info align ".$infoalign."\n";
 				#print $hpvclosest."par la \n";
+				
 				if($boolean_infofile eq "true"){
 					push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".${$$hdatafun{$title}{$pool}}[11]."-".${$$hdatafun{$title}{$pool}}[12]."\t".$title."\t".$pool."\t".${$$hdatafun{$title}{$pool}}[6]."\t".${$$hdatafun{$title}{$pool}}[7]."\t".$len."\t".$infoalign."\t".$hpvclosest."\t".$classification."\t".${$$hdatafun{$title}{$pool}}[9]);
 				
@@ -3651,7 +3657,7 @@ sub HPVblastn{
 	my $outfun=shift;
 	my $resultfun = $fac->blastn( -query => $seqfun,										#Faire le blast avec la sequence $seq -db_data => '/data/robitaillea/blastHPVdb/HPV.fasta',	
 			 -outfile => $outfun, 
-			 #~ -db_data => '/data/robitaillea/blastHPVdb/HPV.fasta',
+			 # -db_data => '/home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/databases/PyV/References.fasta',
 			 -method_args => [	-num_alignments => '1',			#	recupération de 50 alignements
 							-show_gis => 'yes',					#	le nom du resultat doit contenir le numéro GI
 							-word_size => '11',					#	taille du mot pour effectuer la recherche
@@ -3662,7 +3668,6 @@ sub HPVblastn{
 							-gapopen => '5',					#														-->	0
 							-gapextend => '2',					#														-->	2
 							] );
-							
 	my $in2fun=Bio::SearchIO->new(	-format => 'blast',								#Ouverture en lecture du fichier de resultat blast
 								-file => $outfun);
 	return $in2fun;
