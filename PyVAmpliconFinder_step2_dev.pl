@@ -1535,7 +1535,7 @@ my $fac = Bio::Tools::Run::StandAloneBlastPlus->new(
    -create => 1,
    -alphabet=>'dna'
 		);
-		
+print $fac." is fac \n";
 ##########
 ##	NEW	##
 ##########
@@ -1543,7 +1543,8 @@ my $tmp=$output_new."/tmp";
 mkdir $tmp;
 
 chdir $output_new;
-print "TEST Create contigs NEW VIRUS\n";
+print "Create contigs NEW VIRUS\n";
+
 my @aecrire=contig_build(\%hdata,\%hseq,$inputdirfasta,$tmp); # SCRIPT S'ARRETE LA 
 
 ##############
@@ -1904,7 +1905,7 @@ sub contig_build{
 				while (my $seq = $in->next_seq){
 				
 					my $id=$seq->display_id();
-					print "id ".$id."\n";
+					# print "id ".$id."\n";
 					if($id eq ${$$hdatafun{$title}{$pool}}[10]){
 						
 						my $out="$tmpfun/$id.blast";
@@ -3657,7 +3658,7 @@ sub HPVblastn{
 	my $outfun=shift;
 	my $resultfun = $fac->blastn( -query => $seqfun,										#Faire le blast avec la sequence $seq -db_data => '/data/robitaillea/blastHPVdb/HPV.fasta',	
 			 -outfile => $outfun, 
-			 # -db_data => '/home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/databases/PyV/References.fasta',
+			 # -db_data => '/home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/databases/References.fasta',
 			 -method_args => [	-num_alignments => '1',			#	recupération de 50 alignements
 							-show_gis => 'yes',					#	le nom du resultat doit contenir le numéro GI
 							-word_size => '11',					#	taille du mot pour effectuer la recherche
