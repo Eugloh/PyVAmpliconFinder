@@ -311,7 +311,7 @@ sub readinfofile{
 
 #~ cat <(sed -e '1d' download_animal_RefClone_*.csv | awk -v OFS="\t" -F"\t" '{print $1, $9, $3}') <(sed -e '1d' download_human_RefClone_*.csv | awk -v OFS="\t" -F"\t" '{print $1, $5, $2}') > pave_table.txt
 
-my $table="$dirname/raxml/PyV_table3.txt";
+my $table="$dirname/raxml/PyV_table4.txt";
 
 # \s match white space 
 
@@ -322,7 +322,7 @@ open(T, $table) or die "$! : $table\n";	#NC_022519	AelPyV1	Betapolyomavirus
 while(<T>){
 	chomp($_);
 	my @tab=split(/\t/,$_);
-	if((defined($tab[1])) && $tab[1]!~/^\s*$/){
+	if((defined($tab[0])) && $tab[0]!~/^\s*$/){
 		$hacctohpv{$tab[1]}=$tab[0];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
 	}
 	if((defined($tab[2])) && $tab[2]!~/^\s*$/){
@@ -335,9 +335,9 @@ while(<T>){
 }
 close(T);
 
-#print %hacctohpv; # el de la 2e colonne de pyv table
-#print %hacctotax; # melange de la 2e et 3e colonne 
-#print %hhpvtotax; # melange de la 1e et 3e colonne 
+#print %hacctohpv."\n"; # el de la 2e colonne de pyv table
+#print %hacctotax."\n"; # melange de la 2e et 3e colonne 
+#print %hhpvtotax."\n";# melange de la 1e et 3e colonne 
 
 my %htype;#number of reads by pool and organism category - key = pool & organism type
 my %hhpv;#number of reads by pool and HPV category - key = tissue - VIRUS type
@@ -492,7 +492,7 @@ sub loadblastresult{
 				$clusttissue{$tissu{$pool}}+=1;
 				
 				#~ if($percid>=90.0){
-				if($percid>=95.0){							#Test thershold 5%
+				if($percid>=90.0){							#Test thershold 5%
 					
 					$htype{$pool}{'VIRUS'}+=$reads;
 					$hprimer{$primer{$pool}}{'VIRUS'}+=$reads;
@@ -771,7 +771,7 @@ my %taxid2spe=();
 my %taxid2fam=();
 
 my $lineage="$dirname/databases/lineages/ncbi_lineages-virus.csv";		
-print $lineage."\n";
+#print $lineage."\n";
 
 my $csv = Text::CSV->new ( { binary => 1 } ) or die "Cannot use CSV: ".Text::CSV->error_diag ();
 
@@ -1531,11 +1531,15 @@ sub concat_sequence{
 ##################################
 my $fac = Bio::Tools::Run::StandAloneBlastPlus->new(
    #-db_data => $dirname.'/databases/PaVE/PaVE.fasta', #References.fasta
-   -db_data => $dirname.'/databases/References.fasta',
+   -db_data => $dirname.'/databases/References3.fasta',
+   #-db_data => $dirname.'/databases/renamed.fasta',
    -create => 1,
    -alphabet=>'dna'
 		);
-print $fac." is fac \n";
+
+#my $fac->make_db; 
+#print $fac." is fac \n";
+
 ##########
 ##	NEW	##
 ##########
@@ -1574,8 +1578,8 @@ sub contig_build{
 	my $inputdirfasta=shift;
 	my $tmpfun=shift;
 
-	print $inputdirfasta."\n";
-	print $tmpfun."\n";
+	#print $inputdirfasta."\n";
+	#print $tmpfun."\n";
 	my @aecrirefun=();
 
 	my $k=0;
@@ -1585,12 +1589,12 @@ sub contig_build{
 		##########################
 		##Préparation du blastn
 		my $p=$pool;																##Transformer Pool en pool car nom de fichier uniquement en minuscule
-		print $p."\n";		 
+		#print $p."\n";		 
 		foreach my $title (keys %$hdatafun){
 			##########################
 			##	Pour chaque cluster	##
 			##########################		
-			print "$k\n"; # 0 
+			#print "$k\n"; # 0 
 			if(defined($$hseqfun{$title}{$pool})){	
 				##############################################
 				##	Si plusieurs sequences dans ce cluster	##
@@ -1605,7 +1609,6 @@ sub contig_build{
 					my $idtmp=$tabtmp[0];
 					my $l=$tabtmp[1];
 					print TMP ">".$idtmp."\n".$l."\n";
-					#~ print ">".$idtmp."\n".$l."\n";
 					$s++;
 				}
 				close(TMP);
@@ -1905,7 +1908,7 @@ sub contig_build{
 				while (my $seq = $in->next_seq){
 				
 					my $id=$seq->display_id();
-					# print "id ".$id."\n";
+
 					if($id eq ${$$hdatafun{$title}{$pool}}[10]){
 						
 						my $out="$tmpfun/$id.blast";
@@ -3669,6 +3672,7 @@ sub HPVblastn{
 							-gapopen => '5',					#														-->	0
 							-gapextend => '2',					#														-->	2
 							] );
+	#print $resultfun."\n";
 	my $in2fun=Bio::SearchIO->new(	-format => 'blast',								#Ouverture en lecture du fichier de resultat blast
 								-file => $outfun);
 	return $in2fun;

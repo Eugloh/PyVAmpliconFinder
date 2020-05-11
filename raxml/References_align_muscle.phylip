@@ -19,7 +19,7 @@ WUPyV     ---------- ---------- ---------- ---------- ---------- ---------- ----
 SquiPyV   ---------- ---------- ---------- ----TTTCTG CTTTTTTTCA GGTGCTGAGT TGC------- ---------- 
 MCPyV     ---------- ---------- ---CTTGTCT ATATGCAGAA GGAGTTTGCA GAAAGAGCAG AGGAGCAAAT GAGCTACCTC 
 MyPyV     ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
-OraPyV-Bor---------- ---------- ---------- -GGCTGTTGG ATGCACCAGA AGACAGGTAA GGGGAGAAAT GAAGATGGCT 
+OraPyVBor ---------- ---------- ---------- -GGCTGTTGG ATGCACCAGA AGACAGGTAA GGGGAGAAAT GAAGATGGCT 
 SLPyV     ---------- ---------- ---------- ---------- CTTTTTTGCA GGTGCTGAA- ---------- ---------- 
 TSPyV     ---------- ---------- ---------- ------GCCT CAGCCTCCTG GTAATACTGA GAAAAAACAA GATTTCCATA 
 HPyV6     ---------- ---------- ---------- ---------T TTGCTGCTTG AGTAGTCTCT GAATGAAATG TTAAAATCCC 
@@ -37,21 +37,21 @@ PtrovPyV3 ---------- ---------- ------GCTG ACCAACCTTG CAGTTTTGCA GCAAACCCAG CAAG
 PtrovPyV4 ---------- ---------- -GCTAACTAA CCTTGCAATA TTTTTTTGCA GAGATCCAAA GCAAGC---- ---------- 
 PtrovPyV5 ---------- ---------- ---------- ---------- -GGCTGTGAG AAAAATAAAT GGACTTAGTC TCTGAGGTAA 
 PtrosPyV2 ---------- ---------- --------GG CTGCAAGGAT GAGCTCTGCA AGGGAAAAAT AGGGTTTGCA GATACTTAAG 
-ChaerePyv1---------- ---------- ---------- -----TTTAC CTGCTCTGTT GAGACAA--- ---------- ---------- 
-OtomopsPyV ---------- ---------- ---------- ----TTTTAC CTGCCTCCTC TGAGCAACGT GGGCTGCAAG AACTA----- 
+ChaerePy1 ---------- ---------- ---------- -----TTTAC CTGCTCTGTT GAGACAA--- ---------- ---------- 
+OtomopsPy2 ---------- ---------- ---------- ----TTTTAC CTGCCTCCTC TGAGCAACGT GGGCTGCAAG AACTA----- 
 Cardioderm ---------- ---------- ---------- ---------- --GATTGAAG AGTGGCAAAT GAAGCCACAT AACCG----- 
-EidolonPyV---------- ---------- ---------- ---------- -GGCTGCTGA GAGAGAATGA AGTGCTTAAA ACATTTGGGA 
+Eidolon    ---------- ---------- ---------- ---------- -GGCTGCTGA GAGAGAATGA AGTGCTTAAA ACATTTGGGA 
 Miniopteru ---------- ---------- ---------- -----ATCTG CTCTTTTTTA GGTG------ ---------- ---------- 
 Pteronotus ---------- ---------- ---------- -----TTTTA TTTTTGTGCA GAAATA---- ---------- ---------- 
-OtomopsPyV ---------- ---------- ----GGCTGA AGAGGCTCTA GAGATCCTGA GGAGGAGAAT AACAGGCTTT TATACCAGCC 
+OtomopsPy1 ---------- ---------- ----GGCTGA AGAGGCTCTA GAGATCCTGA GGAGGAGAAT AACAGGCTTT TATACCAGCC 
 STLPyV    ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
 HPyV12    ---------- ---------- ---------- ---------- --TCTGCTAA ATTAGTGCAG T--------- ---------- 
 AelPyV1   ---------- ---------- ---------- --------TT TGCCTCTGAA GA-------- ---------- ---------- 
 RacPyV    ---------- ---------- ---------- -----TGTCC CCTATCTGCA GTTAAAAAT- ---------- ---------- 
 NJPyV     ---------- ---------- ---------- ---------T TACCTGCCTA GAAGACCTTG CAGCCCG--- ---------- 
 otterPyV  ---------- ---------- ---CACTGCA GGTGAATGCA AATTCTTGCA GGTAAAAGCA GAGAAATGCA A--------- 
-PtrovPyV1a---------- ---------- ---------- -GGCTGCAGC AGTCTTAGCA AGGACTGCAA ATGAAATACA TCATCTAGGA 
-PtrovPyV2a---------- ---------- -----GTTGT TGCAGTAGCT GTGCTCTGCT AAAAAATGAG CTACATCACC TAGGAGTGGC 
+PtrovPy1a ---------- ---------- ---------- -GGCTGCAGC AGTCTTAGCA AGGACTGCAA ATGAAATACA TCATCTAGGA 
+PtrovPy2a ---------- ---------- -----GTTGT TGCAGTAGCT GTGCTCTGCT AAAAAATGAG CTACATCACC TAGGAGTGGC 
 GgorgPyV1 ---------- ---------- ---------- ---GTTGGTG GAGCTCTGCA AGCAAAATGA GCTACATCAC TTAGGAGTGG 
 BPyV3     ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
 BPyV2     ---------- ---------- ---------- ---------- ---CTTCACA GAAATCTTTG CAAAAAAAGG GCGCGCAGC- 
@@ -66,7 +66,7 @@ TbraPyV2  ---------- ---------- ---------- --------TT TACCTGCCTG AAGAGCTTCA AAGG
 MmelPyV1  ---------- ---------- ---------- ---------T TTCTTTTACA ---------- ---------- ---------- 
 BatPyV6a  ---------- ---------- ---------- -----TTTTG CTGTTTTTCA GGTAAAAAAG AAGA------ ---------- 
 BatPyV6d  ---------- ---------- ---------- -----TTTTT TGTCTTTACA GGTT------ ---------- ---------- 
-BatPyV5b-1---------- ---------- ---------- -------TTT GAAATGAAAA AGAGCGCGAA AAAAGCTGTA GAGCAACTTA 
+BatPyV5b1 ---------- ---------- ---------- -------TTT GAAATGAAAA AGAGCGCGAA AAAAGCTGTA GAGCAACTTA 
 BatPyV5a  ---------- ---------- ---------- ---------- --GTTTTAAA TGAAAAAGGC GCGAAAATGC AAGTTGAGCA 
 BatPyV6c  ---------- ---------- ---------- -----TTTTT GTGTTTTTCA GGTGGAA--- ---------- ---------- 
 BatPyV6b  ---------- ---------- ---------- -----TTTTA ATGTCTTTCA GATAAAAAGA AGG------- ---------- 
@@ -79,7 +79,7 @@ BatPyV4b  ---------- ---------- ---------- ---------- -GGCTGCAAA ATGGCAGTTG AAAA
 BatPyV2b  ---------- ---------- ---------- ---------T TTTTTGTGCA GAGTAAAGAC CCTTTTGCTG C--------- 
 BatPyV2a  ---------- ---------- ---------- ---------- -TTTCTTGCA GAAATT---- ---------- ---------- 
 BatPyV3b  ---------- ---------- ---------- -----TTTAC CTGCCTGAAA GGACCTGCAG AGGGGCTCT- ---------- 
-OraPyV-Sum---------- ---------- ---------- ----TCTAAC TAACCTTGCA GCAAAATTGC AGTTCCACAG CAAGCCTGT- 
+OraPyVSum ---------- ---------- ---------- ----TCTAAC TAACCTTGCA GCAAAATTGC AGTTCCACAG CAAGCCTGT- 
 PtrovPyV8 ---------- ---------- ---------- ---------- -----TTTCA GAAAGTTTGG CAAAGTTTTA GCCTTAA--- 
 SaurPyV1  ---------- ---------G GTGGTGTGTG AAGGGATGCT GAGTTTTTTA GTATTTATAG GGATGGAGTG TGTGTTTTCT 
 PyVCA1    ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
@@ -95,10 +95,10 @@ LIPyV     ---------- ---------- ---------- -----ACTAA CAAATGCAAG GTATAGGCGG GAGA
 PlotPyV1  ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
 CfamPyV1  ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
 AmelPyV1  ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
-BatPyV5b-2---------- ---------- ---------- -------TTT TGAATGCAAA AAGAGCGGGA AAAAAGCTGT AGAGCAACTT 
-BatPyV3a-A ---------- ---------- ---------- -----TTTAC CTGCCTTTGA AGAGCAAATT CAAGGTAGAA AGGCA----- 
+BatPyV5b2 ---------- ---------- ---------- -------TTT TGAATGCAAA AAGAGCGGGA AAAAAGCTGT AGAGCAACTT 
+BatPyV3aA ---------- ---------- ---------- -----TTTAC CTGCCTTTGA AGAGCAAATT CAAGGTAGAA AGGCA----- 
 BatPyV4a  ---------- ---------- ---------- ---CTCTCTT TTTTGCTGCA GAAAAC---- ---------- ---------- 
-BatPyV3a-B ---------- ---------- ---------- -----TTTAC CTGCCTTTGA AGAGCAAAGT CAAGGTAGAA ---------- 
+BatPyV3aB ---------- ---------- ---------- -----TTTAC CTGCCTTTGA AGAGCAAAGT CAAGGTAGAA ---------- 
 BatPyV2c  ---------- ---------- ---------- ---------- -GGCTGCAAA GTGACAGTTA GAGAGCTTGC ACTCTCTTAT 
 SsciPyV1  ---------- ---------- ---------- ----TTTCTG CTTTTTTTCA GGTGCTGAGT TGC------- ---------- 
 PbadPyV2  ---------- ---------- ---------- --------TT TACCTGGCTA GAAGACCTA- ---------- ---------- 

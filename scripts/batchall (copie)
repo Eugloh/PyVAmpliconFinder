@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 #SBATCH -J "PyVAmplicon"
 #SBATCH -A "DEEP_sample"
-#SBATCH -c 16					   ### number of files to treat 
+#SBATCH -c 28					   ### number of files to treat 
 #SBATCH --mem=16G 				   ### blastn purpose
 #SBATCH --mail-user="lohmanne@students.iarc.fr"
 #SBATCH --mail-type=ALL
@@ -21,6 +21,6 @@ source activate PVAmpliconFinder
 	 -d files \
 	 -o all \
 	 -f infofile.csv \
-	 -t 16
+	 -t 28
 date
 echo ok

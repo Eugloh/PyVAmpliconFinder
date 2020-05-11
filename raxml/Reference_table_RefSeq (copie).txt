@@ -8,14 +8,14 @@ BatKSAPyV	Bat polyomavirus isolate KSA403	Unassigned	NC_040600
 BatPyV2a	Desmodus rotundus polyomavirus 1 isolate AT7	Betapolyomavirus	NC_028122
 BatPyV2b	Pteronotus parnellii polyomavirus 1 isolate R266	Betapolyomavirus	NC_028121
 BatPyV2c	Artibeus planirostris polyomavirus 1 isolate R104	Betapolyomavirus	NC_038558
-BatPyV3aA	Artibeus planirostris polyomavirus 2 isolate A1055	Alphapolyomavirus	NC_038555
-BatPyV3aB	Sturnira lilium polyomavirus 1 isolate B0454	Alphapolyomavirus	NC_038557
+BatPyV3a-A1055	Artibeus planirostris polyomavirus 2 isolate A1055	Alphapolyomavirus	NC_038555
+BatPyV3a-B0454	Sturnira lilium polyomavirus 1 isolate B0454	Alphapolyomavirus	NC_038557
 BatPyV3b	Molossus molossus polyomavirus 1 isolate B1130	Alphapolyomavirus	NC_028123
 BatPyV4a	Artibeus planirostris polyomavirus 3 isolate A504	Alphapolyomavirus	NC_038556
 BatPyV4b	Carollia perspicillata polyomavirus 1 isolate C1109	Alphapolyomavirus	NC_028120
 BatPyV5a	Bat polyomavirus 5a DNA	Alphapolyomavirus	NC_026768
-BatPyV5b1	Bat polyomanvirus 5b-1 DNA	Alphapolyomavirus	NC_026767
-BatPyV5b2	Bat polyomavirus 5b DNA	Alphapolyomavirus	NC_038554
+BatPyV5b-1	Bat polyomanvirus 5b-1 DNA	Alphapolyomavirus	NC_026767
+BatPyV5b-2	Bat polyomavirus 5b DNA	Alphapolyomavirus	NC_038554
 BatPyV6a	Bat polyomavirus 6a DNA	Betapolyomavirus	NC_026762
 BatPyV6b	Bat polyomavirus 6b DNA	Betapolyomavirus	NC_026770
 BatPyV6c	Bat polyomavirus 6c DNA	Betapolyomavirus	NC_026769
@@ -26,15 +26,15 @@ BPyV2	Bovine polyomavirus 2 strain BPyV2-SF	Unassigned	NC_025811
 BPyV3	Bovine polyomavirus-3 isolate 3S5	Unassigned	NC_025800
 BVPyV	Bank vole polyomavirus isolate KS/14/281	Betapolyomavirus	NC_028117
 CalbPyV1	Cebus albifrons polyomavirus 1	Betapolyomavirus	NC_019854
-Cardioderm	Cardioderma polyomavirus isolate KY336	Alphapolyomavirus	NC_020067
+CardiodermaPyV	Cardioderma polyomavirus isolate KY336	Alphapolyomavirus	NC_020067
 CeryPyV1	Cercopithecus erythrotis polyomavirus 1 isolate 4077	Betapolyomavirus	NC_025892
 CfamPyV1	Canis familiaris polyomavirus 1 isolate R006926 CT2015	Betapolyomavirus	NC_034456
-ChaerePy1	Chaerephon polyomavirus 1 isolate KY397	Unassigned	NC_020065
+ChaerePyv1	Chaerephon polyomavirus 1 isolate KY397	Unassigned	NC_020065
 ChPyV	Chimpanzee polyomavirus Bob complete genome	Alphapolyomavirus	NC_014743
 CpyV	Crow polyomavirus	Gammapolyomavirus	NC_007922
 CVPyV	Common vole polyomavirus isolate KS13/0947	Betapolyomavirus	NC_028119
 DolPyV1	Dolphin polyomavirus 1 isolate DPyV-1/Trachea/2010	Unassigned	NC_025899
-Eidolon	Eidolon polyomavirus 1 isolate KY270	Alphapolyomavirus	NC_020068
+EidolonPyV	Eidolon polyomavirus 1 isolate KY270	Alphapolyomavirus	NC_020068
 EPyV	Equus caballus polyomavirus 1 isolate CU03	Betapolyomavirus	NC_017982
 GgorgPyV1	Gorilla gorilla gorilla polyomavirus 1 isolate 5766	Alphapolyomavirus	NC_025380
 GlisPyV1	Glis glis polyomavirus 1 isolate 3327 ID3a	Unassigned	NC_040821
@@ -49,7 +49,7 @@ LIPyV	LI polyomavirus isolate LIPyV	Unassigned	NC_034253
 MasPyV	Mastomys natalensis polyomavirus 1 DNA	Betapolyomavirus	NC_025895
 MCPyV	Merkel cell polyomavirus isolate R17b	Alphapolyomavirus	NC_010277
 MfasPyV1	Macaca fascicularis polyomavirus 1	Alphapolyomavirus	NC_019851
-Miniopteru	Miniopterus africanus polyomavirus 1 isolate KY369	Betapolyomavirus	NC_020069
+MiniopterusPyV	Miniopterus africanus polyomavirus 1 isolate KY369	Betapolyomavirus	NC_020069
 MmelPyV1	Meles meles polyomavirus 1 isolate French	Betapolyomavirus	NC_026473
 MPtV	Murine pneumotropic virus	Betapolyomavirus	NC_001505
 MPyV	Murine polyomavirus strain BG	Alphapolyomavirus	NC_001515
@@ -59,23 +59,23 @@ MWPyV	MW polyomavirus	Deltapolyomavirus	NC_018102
 MyoCaPyV1	Myocastor coypus polyomavirus 1	Unassigned	NC_040573
 MyPyV	Myotis polyomavirus VM-2008	Betapolyomavirus	NC_011310
 NJPyV	New Jersey polyomavirus-2013 isolate NJ-PyV-2013	Alphapolyomavirus	NC_024118
-OraPyVBor	Bornean orang-utan polyomavirus complete genome	Alphapolyomavirus	NC_013439
-OraPyVSum	Sumatran orang-utan polyomavirus complete genome	Alphapolyomavirus	NC_028127
-OtomopsPy1	Otomops polyomavirus KY157	Alphapolyomavirus	NC_020071
-OtomopsPy2	Otomops polyomavirus KY156	Alphapolyomavirus	NC_020066
+OraPyV-Bor	Bornean orang-utan polyomavirus complete genome	Alphapolyomavirus	NC_013439
+OraPyV-Sum	Sumatran orang-utan polyomavirus complete genome	Alphapolyomavirus	NC_028127
+OtomopsPyV1	Otomops polyomavirus KY157	Alphapolyomavirus	NC_020071
+OtomopsPyV2	Otomops polyomavirus KY156	Alphapolyomavirus	NC_020066
 otterPyV	Sea otter polyomavirus 1 isolate 6831-13	Unassigned	NC_025259
-PantheraPy	Panthera leo polyomavirus 1 isolate 3884	Unassigned	NC_040822
+PantheraPyV	Panthera leo polyomavirus 1 isolate 3884	Unassigned	NC_040822
 PbadPyV2	Piliocolobus badius polyomavirus 2 isolate 5947	Alphapolyomavirus	NC_039051
 PlnBatPyV	Pomona leaf-nosed bat associated polyomavirus 1 complete genome	Unassigned	NC_033737
 PlotPyV1	Raccoon-associated polyomavirus 2 isolate Rac2	Unassigned	NC_034378
 PorcPyV	Porcine polyomavirus strain 180230	Unassigned	NC_040714
-Potamochoe	Potamochoerus porcus polyomavirus 1 isolate 9780 PI225	Unassigned	NC_040634
+PotamochoerusPyV	Potamochoerus porcus polyomavirus 1 isolate 9780 PI225	Unassigned	NC_040634
 PrufPyV1	Piliocolobus rufomitratus polyomavirus 1 isolate 4601	Alphapolyomavirus	NC_019850
-Pteronotus	Pteronotus davyi polyomavirus 1 isolate GTM203	Betapolyomavirus	NC_020070
+PteronotusPyV	Pteronotus davyi polyomavirus 1 isolate GTM203	Betapolyomavirus	NC_020070
 PtrosPyV2	Pan troglodytes polyomavirus 7 isolate 6350	Alphapolyomavirus	NC_019858
 PtrotPyV1	Pan troglodytes troglodytes polyomavirus 1 isolate F514.1	Unassigned	NC_027532
-PtrovPy1a	Pan troglodytes verus polyomavirus 1a isolate 6444	Alphapolyomavirus	NC_025368
-PtrovPy2a	Pan troglodytes polyomavirus 3 isolate 6512	Alphapolyomavirus	NC_025370
+PtrovPyV1a	Pan troglodytes verus polyomavirus 1a isolate 6444	Alphapolyomavirus	NC_025368
+PtrovPyV2a	Pan troglodytes polyomavirus 3 isolate 6512	Alphapolyomavirus	NC_025370
 PtrovPyV3	Pan troglodytes polyomavirus 4 isolate 3161	Alphapolyomavirus	NC_019855
 PtrovPyV4	Pan troglodytes polyomavirus 5 isolate 3147	Alphapolyomavirus	NC_019856
 PtrovPyV5	Pan troglodytes polyomavirus 6 isolate 5743	Alphapolyomavirus	NC_019857
@@ -99,7 +99,7 @@ SminPyV1	Sorex coronatus polyomavirus 1 isolate #7586_MU08/1013	Alphapolyomaviru
 SquiPyV	Squirrel monkey polyomavirus	Betapolyomavirus	NC_009951
 SsciPyV1	Saimiri sciureus polyomavirus 1	Betapolyomavirus	NC_038559
 STLPyV	STL polyomavirus strain MA138	Deltapolyomavirus	NC_020106
-susScorfPy	Sus scrofa polyomavirus 1 isolate 471	Unassigned	NC_040598
+susScorfPyV	Sus scrofa polyomavirus 1 isolate 471	Unassigned	NC_040598
 SV12	Simian virus 12	Unassigned	NC_001669
 SV40	Simian virus 40 complete genome	Betapolyomavirus	NC_001669
 TbraPyV1	Tadarida brasiliensis polyomavirus 1	Unassigned	NC_026012
