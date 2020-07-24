@@ -16,4 +16,23 @@ batch_output/*
 tmp/*
 all/*
 files/*
+.~lock.infoAboutFiles.csv#
+PyVAmpliconFinder_step2_dev2.pl
+SFE
+info/infoSFE
+info/infolinfoma
+info/infosamplesxls.xlsx
+info/infoskin
+info/infovulval
+infoAboutFiles.csv
+linfoma
+renamed_files/
+retest/
+scripts/batch_SFE
+scripts/batch_linfoma
+scripts/batch_skin
+scripts/batch_vulva
+scripts/skin/
+skin
+vulval
 

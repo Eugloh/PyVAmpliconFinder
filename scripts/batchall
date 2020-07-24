@@ -1,7 +1,7 @@
 #!/usr/bin/bash
-#SBATCH -J "PyVAmplicon"
-#SBATCH -A "DEEP_sample"
-#SBATCH -c 1					   ### number of files to treat 
+#SBATCH -J "PyV_PCR_infofile"
+#SBATCH -A "New_analysis_infofile"
+#SBATCH -c 16					   ### number of files to treat 
 #SBATCH --mem=16G 				   ### blastn purpose
 #SBATCH --mail-user="lohmanne@students.iarc.fr"
 #SBATCH --mail-type=ALL
@@ -12,15 +12,15 @@ uname -a
 echo starting job
 date
 
-# files of the RSU analysis are in /data/icb/NGS2_Luisa_amplicon/work/RSU/files 
+# files of the new analysis are in /data/icb/NGS2_Luisa_amplicon/work/RSU/files 
 #conda init
 source activate PVAmpliconFinder 
 /home/lohmanne/PyVAmpliconFinder/PyVAmpliconFinder_dev.sh \
 	 -b nt \
-	 -s NGSDEEP \
+	 -s pool \
 	 -d /home/lohmanne/PyVAmpliconFinder/files \
-	 -o /home/lohmanne/PyVAmpliconFinder/all \
-	 -f /home/lohmanne/PyVAmpliconFinder/infofile.csv \
-	 -t 1
+	 -o /home/lohmanne/PyVAmpliconFinder/analyseInfofile \
+	 -f /home/lohmanne/PyVAmpliconFinder/infoAboutFiles.csv \
+	 -t 16
 date
 echo ok

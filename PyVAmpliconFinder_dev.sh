@@ -3,7 +3,7 @@
 ### DEV OF PYVAMPLICONFINDER 
 
 ##############################################################
-##	amplicon_processing_HPV_Vlast.sh						##
+##	amplicon_processing_HPyV_Vlast.sh						##
 ##	01/02/2017												##
 ##	Amplicon sequencing Illumina MiSeq						##
 ##	Adaptation for polyomaviridae sequences                 ##
@@ -42,7 +42,7 @@ where:
     "
     
 ##	Example
-#time ./amplicon_processing_HPV_Vlast.sh -s pool -d /data/robitaillea/NGS1/fastq_files -o /data/robitaillea/NGS1/output -f /data/robitaillea/NGS1/infofile.txt -t 8
+#time ./amplicon_processing_HPyV_Vlast.sh -s pool -d /data/robitaillea/NGS1/fastq_files -o /data/robitaillea/NGS1/output -f /data/robitaillea/NGS1/infofile.txt -t 8
 
 ##	Get the parameters
 while getopts ':hs:d:t:o:b:f:i:' option; do
@@ -341,17 +341,27 @@ echo -e "##########################################\n##\tAdvanced analysis\t\t##
 
 cd ${dir};
 
-if [ ! -d ${working_dir}"/analysis_new" ]
-then
-	chmod +x $BASEDIR/PyVAmpliconFinder_step2_dev.pl;
-	#echo ${blastdir};
-	#echo ${working_dir};
-	#echo ${suffix};
-	#echo ${outputdir};
-	#echo ${threads};
-	#echo ${info};
-	perl $BASEDIR/PyVAmpliconFinder_step2_dev.pl -i ${blastdir} -o ${working_dir} -s ${suffix} -d ${outputdir} -t ${threads} -f ${info};
-else
-	echo -e "Advanced analysis already done";
-	#echo -e "Advanced analysis already done" >> $logfile;	
-fi
+# if [ ! -d ${working_dir}"/analysis_new" ]
+# then
+# 	chmod +x $BASEDIR/PyVAmpliconFinder_step2_dev.pl;
+# 	echo ${blastdir};
+# 	echo ${working_dir};
+# 	echo ${suffix};
+# 	echo ${outputdir};
+# 	echo ${threads};
+# 	echo ${info};
+# 	#perl $BASEDIR/PyVAmpliconFinder_step2_dev2.pl -i ${blastdir} -o ${working_dir} -s ${suffix} -d ${outputdir} -t ${threads} -f ${info};
+# else
+# 	echo -e "Advanced analysis already done";
+# 	#echo -e "Advanced analysis already done" >> $logfile;	
+# fi
+
+
+chmod +x $BASEDIR/PyVAmpliconFinder_step2_dev.pl;
+echo ${blastdir};
+echo ${working_dir};
+echo ${suffix};
+echo ${outputdir};
+echo ${threads};
+echo ${info};
+perl $BASEDIR/PyVAmpliconFinder_step2_dev.pl -i ${blastdir} -o ${working_dir} -s ${suffix} -d ${outputdir} -t ${threads} -f ${info};

@@ -3,7 +3,7 @@
 ### DEV OF PYVAMPLICONFINDER 
 
 ##############################################################
-##	analysis_summary_HPV_Vlast.pl							##
+##	analysis_summary_HPYV_Vlast.pl							##
 ##	04/09/2017												##
 ##	Amplicon sequencing Illumina MiSeq	- 	Step 2			##
 ##	Adaptation for polyomaviridae sequences                 ##
@@ -93,7 +93,7 @@ if ( $opts{h} ) {
 ##############################
 ##	Command line example	##
 ##############################
-#	time perl analysis_summary_HPV_Vlast.pl -i output/blast_result -o output/results -s pool -d output/vsearch -t 8 -f infofile.txt;
+#	time perl analysis_summary_HPYV_Vlast.pl -i output/blast_result -o output/results -s pool -d output/vsearch -t 8 -f infofile.txt;
 
 
 my $whereiam=getcwd;		##	where the analysis is done
@@ -132,7 +132,7 @@ analysis_summary.pl [-h] [-f infos_file] -i input_dir_blast -o output_dir -s suf
 
 
 #Virus	Species Name	--> 	FILES (easy update but have to be given with the tool) OR HASHTABLE IN THE SCRIPT (less clean/hard to update but no extra file)??
-#~ my $hpvinfos="/data/robitaillea/THESIS/HPV_type.txt";
+#~ my $hpyvinfos="/data/robitaillea/THESIS/HPYV_type.txt";
 
 ##	CETTE INFO PEUT ETRE RECUPEREE DU BLASTN
 
@@ -315,32 +315,33 @@ my $table="$dirname/raxml/PyV_table4.txt";
 
 # \s match white space 
 
-my %hacctohpv=();
+my %hacctohpyv=();
 my %hacctotax=();
-my %hhpvtotax=();
+my %hhpyvtotax=();
 open(T, $table) or die "$! : $table\n";	#NC_022519	AelPyV1	Betapolyomavirus
 while(<T>){
 	chomp($_);
 	my @tab=split(/\t/,$_);
+	##  /^\s*$/ : ligne qui est vide ou contient que du whitespace (espaces/tabs) : !~ dans awk ça negate le match :toute ligne qui n'est pas vide ou juste avec du whitespace
 	if((defined($tab[0])) && $tab[0]!~/^\s*$/){
-		$hacctohpv{$tab[1]}=$tab[0];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
+		$hacctohpyv{$tab[0]}=$tab[1];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
 	}
 	if((defined($tab[2])) && $tab[2]!~/^\s*$/){
-		$hacctotax{$tab[1]}=$tab[2];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
+		$hacctotax{$tab[0]}=$tab[2];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
 	}
-	if((defined($tab[0])) && $tab[0]!~/^\s*$/){
-		$hhpvtotax{$tab[0]}=$tab[2];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
+	if((defined($tab[1])) && $tab[1]!~/^\s*$/){
+		$hhpyvtotax{$tab[1]}=$tab[2];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
 	}
 
 }
 close(T);
 
-#print %hacctohpv."\n"; # el de la 2e colonne de pyv table
+#print %hacctohpyv."\n"; # el de la 2e colonne de pyv table
 #print %hacctotax."\n"; # melange de la 2e et 3e colonne 
-#print %hhpvtotax."\n";# melange de la 1e et 3e colonne 
+#print %hhpyvtotax."\n";# melange de la 1e et 3e colonne 
 
 my %htype;#number of reads by pool and organism category - key = pool & organism type
-my %hhpv;#number of reads by pool and HPV category - key = tissue - VIRUS type
+my %hhpyv;#number of reads by pool and HPYV category - key = tissue - VIRUS type
 my %reads;#number of reads by pool
 my %hprimer;#number of reads by primer and organism category - key = pool - organism type
 
@@ -421,9 +422,9 @@ sub loadblastresult{
 		
 		open(F1, $file) or die "$!: $file\n";
 		
-		##	Write a file with only the HPV more than 10% dissimilarity sequence
+		##	Write a file with only the HPYV more than 10% dissimilarity sequence
 		open(IN, ">".$output_new."/".$filename.".csv") or die "$!: $filename\n";
-		##	Write a file with all the known HPV
+		##	Write a file with all the known HPYV
 		open(KNO, ">".$output_known."/".$filename.".csv") or die "$!: $filename\n";
 		
 		my $header = <F1>;
@@ -507,7 +508,7 @@ sub loadblastresult{
 						chop($virusname);
 					}
 					
-					$hhpv{$pool}{$virusname}+=$reads;
+					$hhpyv{$pool}{$virusname}+=$reads;
 					
 					
 					$htarget{$pool}{'known'}{$virusname}+=$reads;
@@ -526,7 +527,7 @@ sub loadblastresult{
 						chop($virusname);
 					}
 					
-					$hhpv{$pool}{$virusname}+=$reads;
+					$hhpyv{$pool}{$virusname}+=$reads;
 					
 					$htarget{$pool}{'new'}{$virusname}+=$reads;
 					$htargetcluster{$pool}{'new'}{$virusname}+=1;
@@ -564,7 +565,7 @@ sub loadblastresult{
 
 ##	compute the number of uniqu VIRUS type (new/known) in the different primer type
 ##############################################
-##	Count of new / uniqu known HPV by pool	##
+##	Count of new / uniqu known HPYV by pool	##
 ##############################################
 my @tmp=();
 my %hVIRUStot=();
@@ -573,26 +574,26 @@ foreach my $pool (sort @pools){
 	@tmp=();
 	@tmp=uniq @{$hcountknow{$pool}};
 	push(@{$hknown{$pool}},@tmp);
-	#~ $hHPVtot{"known"}+=scalar @tmp;
+	#~ $hHPYVtot{"known"}+=scalar @tmp;
 	push(@{$hVIRUStot{"known"}},@tmp);
 	
 	#NEW
 	@tmp=();
 	@tmp=uniq @{$hcountnew{$pool}};
 	push(@{$hnew{$pool}},@tmp);
-	#~ $hHPVtot{"new"}+=scalar @tmp;
+	#~ $hHPYVtot{"new"}+=scalar @tmp;
 	push(@{$hVIRUStot{"new"}},@tmp);
 
 	#OTHER
 	@tmp=();
 	@tmp=uniq @{$hcountother{$pool}};
 	push(@{$hother{$pool}},@tmp);
-	#~ $hHPVtot{"other"}+=scalar @tmp;
+	#~ $hHPYVtot{"other"}+=scalar @tmp;
 	push(@{$hVIRUStot{"other"}},@tmp);
 }
 
 
-##Reduce at uniqu knwown and other in all the experiment --> not for new because 2 new with same blast results in 2 differents pools are not necessary the same new HPV
+##Reduce at uniqu knwown and other in all the experiment --> not for new because 2 new with same blast results in 2 differents pools are not necessary the same new HPYV
 my %hVIRUStot_uniq=();
 foreach my $k (keys %hVIRUStot){
 	if($k ne "new"){
@@ -619,9 +620,9 @@ if($boolean_infofile eq "true"){
 for my $p (sort keys %htype){
 	
 	my $othersreads=$htype{$p}{'human'}+$htype{$p}{'bacteria'}+$htype{$p}{'other'};
-	# print $othersreads." other\n"; #153 other
+	#~ print $othersreads." other\n";
 	my $allreads=$othersreads+$htype{$p}{'VIRUS'}+$htype{$p}{'newVIRUS'};
-	# print $allreads." all\n"; # 1265130 all
+	#~ print $allreads." all\n";
 	my $virusreads=$htype{$p}{'VIRUS'}+$htype{$p}{'newVIRUS'};
 	my $fracnew;
 	if($virusreads == 0){
@@ -630,7 +631,7 @@ for my $p (sort keys %htype){
 	else{
 		$fracnew=nearest(.001,($htype{$p}{'newVIRUS'}/$virusreads)*100)
 	}
-	# print $virusreads." virus\n"; # 1264977 virus
+	#~ print $virusreads." virus\n";
 	
 	if($allreads!=$reads{$p}){
 		print "Error\n";
@@ -737,11 +738,11 @@ print OUT "\n\n";
 my %known=();	#{pool}{family}{genus}=nb reads
 my %new=();	#{pool}{family}{genus}=nb reads
 
-my @famnew=();	#all family of new HPVs
-my @famknown=();#all family of known HPVs
+my @famnew=();	#all family of new HPYVs
+my @famknown=();#all family of known HPYVs
 
-my %hgennew=();		#all genus of new HPVs per family : keys= family/values=tab of genus
-my %hgenknown=();		#all genus of kown HPVs per family : keys= family/values=tab of genus
+my %hgennew=();		#all genus of new HPYVs per family : keys= family/values=tab of genus
+my %hgenknown=();		#all genus of kown HPYVs per family : keys= family/values=tab of genus
 
 
 
@@ -1050,7 +1051,7 @@ my @listprimer=uniq sort values %primer;
 
 
 ##################################################
-##	WRITE TABLE HPV DIVERSITY BY TISSUE TYPE	##
+##	WRITE TABLE HPYV DIVERSITY BY TISSUE TYPE	##
 ##################################################
 ##				!!	NEW VERSION	!!				##
 ##################################################
@@ -1128,7 +1129,7 @@ foreach my $t (sort keys %hnewtable){		#For each tissue
 					else{
 						print OUT "\t\t\t\t".$n."\t";
 					}
-					my $tabtmp=$@{$hnewtable{$t}{$f}{$g}{$s}{$n}};				##Get the corresponding table :	0 --> cluster number ; then initialize only for pool number having this HPV
+					my $tabtmp=$@{$hnewtable{$t}{$f}{$g}{$s}{$n}};				##Get the corresponding table :	0 --> cluster number ; then initialize only for pool number having this HPYV
 																			##	0	3	4	5
 					
 					my $cluster=@$tabtmp[0]." (".nearest(.01,((@$tabtmp[0]/$clusttissue{$t})*100)).")";		#Get cluster 
@@ -1175,7 +1176,7 @@ foreach my $t (sort keys %hnewtable){		#For each tissue
 
 
 ##########################################
-##	WRITE TABLE HPV DIVERSITY OVERALL	##
+##	WRITE TABLE HPYV DIVERSITY OVERALL	##
 ##########################################
 $ff=0;
 $fg=0;
@@ -1566,7 +1567,7 @@ my @aecrire3=contig_build(\%hdata_known,\%hseq_known,$inputdirfasta,$tmp3);
 ##	contig_build function	##
 ##############################
 ##	This function take the output of Concat_sequence function (%hdata and %hseq) and try to construct contig (cap3) based on the different sequence that get the same megablast match.
-##	Then it launch a blastn of this contig against a PaVE database to get the closest HPV complete genome, and then gat the classification of this best HPV match.
+##	Then it launch a blastn of this contig against a PaVE database to get the closest HPYV complete genome, and then gat the classification of this best HPYV match.
 ##	INPUT :	- %hdata{title}{pool}=@infos([0]=uniqu_id,[1]=percentage_id,[2]=frame,[3]=reads,[4]=ginumber,[5]=pool,[6]=tissue,[7]=primer,[8]=seq_len,[9]=query_seq,[10]=query_id)
 ##			- %hseq{title}{pool}=@seq(id1|seq1,id2|seq2,id3|seq3,...)
 ##			- Directory Path of fasta sequence (fasta format)	!!	The name of the file as to be the same as the name of the output blast file	!!
@@ -1647,10 +1648,10 @@ sub contig_build{
 				my @tseqtmpfun=();
 				my @lentemp=();
 				
-				##	Initialisation des varaible récupérant l'HPV le plus proche ainsi que sa classification
-				my @hpvclosest=();
+				##	Initialisation des varaible récupérant l'HPYV le plus proche ainsi que sa classification
+				my @hpyvclosest=();
 				my @classification=();
-				my $hpvclosest="";
+				my $hpyvclosest="";
 				my $classification="";
 				my @start_stop_len_hit=();
 				
@@ -1686,7 +1687,7 @@ sub contig_build{
 					
 					my $out="$tmpfun/$pool.$title_tmp.$id.blast"; #HERE TO CORRECT
 					
-					my $in2=HPVblastn($seqtmpfun,$out);
+					my $in2=HPYVblastn($seqtmpfun,$out);
 
 
 					my $result=$in2->next_result;									
@@ -1704,12 +1705,12 @@ sub contig_build{
 						
 						my $classification_tmp="";
 						
-						$classification_tmp=$hhpvtotax{$hit_name};
+						$classification_tmp=$hhpyvtotax{$hit_name};
 						
 						if(!(defined($classification_tmp)) or ($classification_tmp eq "")){
 							$classification_tmp="Unclassified";
 						}
-						#~ print $hpv."\n";
+						#~ print $hpyv."\n";
 						#~ print $classification_tmp."\n";
 						
 						#~ my @tab_name=split(/\|/,$hit_name);
@@ -1766,7 +1767,7 @@ sub contig_build{
 						$percent_id_moy=nearest(.01,(($sum/$compte)));
 						push(@start_stop_len_hit,join(";",@start_stop_len_hsp));
 						
-						push(@hpvclosest,$hit_name."($percent_id_moy%)");
+						push(@hpyvclosest,$hit_name."($percent_id_moy%)");
 						push(@classification,$classification_tmp);
 						
 						if($frame_query!=$frame_hit){
@@ -1778,7 +1779,7 @@ sub contig_build{
 						
 					}				##	Si pas de hit
 					else{
-						push(@hpvclosest,"NA");
+						push(@hpyvclosest,"NA");
 						push(@classification,"NA");
 						push(@start_stop_len_hit,"NA");
 						
@@ -1805,7 +1806,7 @@ sub contig_build{
 				my $len="";
 				my $infoalign="";
 				
-				#~ if($#hpvclosest != $#classification){
+				#~ if($#hpyvclosest != $#classification){
 					#~ print ${$$hdatafun{$title}{$pool}}[0]."\n";
 					#~ print $k.$k.$k."fasta";
 					#~ exit;
@@ -1828,16 +1829,16 @@ sub contig_build{
 				#~ }
 				
 				if($#lentemp > 0){		## Plus d'un contigs/singlets au moins un match			 && (@start_stop_len_hsp != 0)
-					my $res=longuestFirst(\@lentemp,\@hpvclosest,\@classification,\@start_stop_len_hit,\@tseqtmpfun);		# Give a copy to avoid replacement @len
+					my $res=longuestFirst(\@lentemp,\@hpyvclosest,\@classification,\@start_stop_len_hit,\@tseqtmpfun);		# Give a copy to avoid replacement @len
 					$len=$$res[0];
-					$hpvclosest=$$res[1];
+					$hpyvclosest=$$res[1];
 					$classification=$$res[2];
 					$infoalign=$$res[3];
 					$seqf=$$res[4];
 				}
 				else{				##	Un seul contigs/singlets au moins un match
 					$len=$lentemp[0];
-					$hpvclosest=$hpvclosest[0];
+					$hpyvclosest=$hpyvclosest[0];
 					$classification=$classification[0];
 					$infoalign=$start_stop_len_hit[0];
 					$seqf=$tseqtmpfun[0];
@@ -1847,7 +1848,7 @@ sub contig_build{
 				#~ else{												##	pas de match
 					#~ print "error\n";exit;
 					#~ $len=join("/",@lentemp);
-					#~ $hpvclosest=join("/",@hpvclosest);
+					#~ $hpyvclosest=join("/",@hpyvclosest);
 					#~ $classification=join("/",@classification);
 				#~ }
 				
@@ -1860,22 +1861,22 @@ sub contig_build{
 				
 				
 				#~ my $len=join("/",@lentemp);
-				#~ $hpvclosest=join("/",@hpvclosest);
+				#~ $hpyvclosest=join("/",@hpyvclosest);
 				#~ $classification=join("/",@classification);
 				
 				#~ my $infoalign=join("/",@start_stop_len_hit);
 				
-				#~ #print $hpvclosest."par ici \n";
+				#~ #print $hpyvclosest."par ici \n";
 				
 				#~ $seqf=join("\t",@tseqtmpfun);
 				
 				if($boolean_infofile eq "true"){
-					#~ push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".$pool."\t".$title."\t".${$$hdatafun{$title}{$pool}}[6]."\t".${$$hdatafun{$title}{$pool}}[7]."\t".join("/",@lentemp)."\t".$infoalign."\t".$hpvclosest."\t".$classification."\t".$seqf);
-					push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".${$$hdatafun{$title}{$pool}}[11]."-".${$$hdatafun{$title}{$pool}}[12]."\t".$title."\t".$pool."\t".${$$hdatafun{$title}{$pool}}[6]."\t".${$$hdatafun{$title}{$pool}}[7]."\t".$len."\t".$infoalign."\t".$hpvclosest."\t".$classification."\t".$seqf);
+					#~ push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".$pool."\t".$title."\t".${$$hdatafun{$title}{$pool}}[6]."\t".${$$hdatafun{$title}{$pool}}[7]."\t".join("/",@lentemp)."\t".$infoalign."\t".$hpyvclosest."\t".$classification."\t".$seqf);
+					push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".${$$hdatafun{$title}{$pool}}[11]."-".${$$hdatafun{$title}{$pool}}[12]."\t".$title."\t".$pool."\t".${$$hdatafun{$title}{$pool}}[6]."\t".${$$hdatafun{$title}{$pool}}[7]."\t".$len."\t".$infoalign."\t".$hpyvclosest."\t".$classification."\t".$seqf);
 				
 				}
 				else{
-					push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".${$$hdatafun{$title}{$pool}}[11]."-".${$$hdatafun{$title}{$pool}}[12]."\t".$title."\t".$pool."\t".$len."\t".$infoalign."\t".$hpvclosest."\t".$classification."\t".$seqf);
+					push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".${$$hdatafun{$title}{$pool}}[11]."-".${$$hdatafun{$title}{$pool}}[12]."\t".$title."\t".$pool."\t".$len."\t".$infoalign."\t".$hpyvclosest."\t".$classification."\t".$seqf);
 				}
 				
 			
@@ -1897,12 +1898,12 @@ sub contig_build{
 				my $len = length(${$$hdatafun{$title}{$pool}}[9]);
 				# print "len ".$len."\n"; # len 63
 				
-				my $hpvclosest="";
+				my $hpyvclosest="";
 				my $classification="";
 				my @start_stop_len_hit=();
 
 				####################################################################################################################################
-				##blastn HPV #######################################################################################################################
+				##blastn HPYV #######################################################################################################################
 				####################################################################################################################################
 				
 				while (my $seq = $in->next_seq){
@@ -1913,7 +1914,7 @@ sub contig_build{
 						
 						my $out="$tmpfun/$id.blast";
 						
-						my $in2=HPVblastn($seq,$out);
+						my $in2=HPYVblastn($seq,$out);
 				
 						my $result=$in2->next_result;									
 						my $var=$result->query_name();
@@ -1939,7 +1940,7 @@ sub contig_build{
 
 							my $classification_tmp="";
 							
-							$classification_tmp=$hhpvtotax{$hit_name};
+							$classification_tmp=$hhpyvtotax{$hit_name};
 						
 							if(!(defined($classification_tmp)) or ($classification_tmp eq "")){
 								$classification_tmp="Unclassified";
@@ -2009,12 +2010,12 @@ sub contig_build{
 							$percent_id_moy=nearest(.01,(($sum/$compte)));
 							push(@start_stop_len_hit,join(";",@start_stop_len_hsp));
 
-							$hpvclosest=$hit_name."($percent_id_moy%)";
+							$hpyvclosest=$hit_name."($percent_id_moy%)";
 							$classification=$classification_tmp;
 							
 						}
 						else{
-							$hpvclosest="NA";
+							$hpyvclosest="NA";
 							$classification="NA";
 						}
 						#~ push(@start_stop_len_hit,join(";",@start_stop_len_hsp));
@@ -2022,14 +2023,14 @@ sub contig_build{
 				}
 				my $infoalign=join("/",@start_stop_len_hit);
 				#print "info align ".$infoalign."\n";
-				#print $hpvclosest."par la \n";
+				#print $hpyvclosest."par la \n";
 				
 				if($boolean_infofile eq "true"){
-					push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".${$$hdatafun{$title}{$pool}}[11]."-".${$$hdatafun{$title}{$pool}}[12]."\t".$title."\t".$pool."\t".${$$hdatafun{$title}{$pool}}[6]."\t".${$$hdatafun{$title}{$pool}}[7]."\t".$len."\t".$infoalign."\t".$hpvclosest."\t".$classification."\t".${$$hdatafun{$title}{$pool}}[9]);
+					push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".${$$hdatafun{$title}{$pool}}[11]."-".${$$hdatafun{$title}{$pool}}[12]."\t".$title."\t".$pool."\t".${$$hdatafun{$title}{$pool}}[6]."\t".${$$hdatafun{$title}{$pool}}[7]."\t".$len."\t".$infoalign."\t".$hpyvclosest."\t".$classification."\t".${$$hdatafun{$title}{$pool}}[9]);
 				
 				}else{
-					#~ push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".$pool."\t".$title."\t".$len."\t".$infoalign."\t".$hpvclosest."\t".$classification."\t".${$$hdatafun{$title}{$pool}}[9]);
-					push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".${$$hdatafun{$title}{$pool}}[11]."-".${$$hdatafun{$title}{$pool}}[12]."\t".$title."\t".$pool."\t".$len."\t".$infoalign."\t".$hpvclosest."\t".$classification."\t".${$$hdatafun{$title}{$pool}}[9]);
+					#~ push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".$pool."\t".$title."\t".$len."\t".$infoalign."\t".$hpyvclosest."\t".$classification."\t".${$$hdatafun{$title}{$pool}}[9]);
+					push(@aecrirefun,${$$hdatafun{$title}{$pool}}[0]."\t".$perc_dis."\t".$abundance."\t".${$$hdatafun{$title}{$pool}}[3]."\t".${$$hdatafun{$title}{$pool}}[4]."\t".${$$hdatafun{$title}{$pool}}[11]."-".${$$hdatafun{$title}{$pool}}[12]."\t".$title."\t".$pool."\t".$len."\t".$infoalign."\t".$hpyvclosest."\t".$classification."\t".${$$hdatafun{$title}{$pool}}[9]);
 				}
 				#~ print "$title\t$perc_dis\n";
 			}
@@ -2237,7 +2238,7 @@ sub treatputative{
 	}
 	
 	if($boolean_infofile eq "true"){
-		#print T "HPVname\t%dissimilarity\tAbundance\tN°reads\tGInum\tPool\tHPV_closest_MegaBlast\tTissu\tPrimer\tLength\tAlignmentPosition_start:stop(length)\tHPV_closest_PaVE_Blast\tClassification\tClassificationRaxML\tSequence(s)\n";
+		#print T "HPYVname\t%dissimilarity\tAbundance\tN°reads\tGInum\tPool\tHPYV_closest_MegaBlast\tTissu\tPrimer\tLength\tAlignmentPosition_start:stop(length)\tHPYV_closest_PaVE_Blast\tClassification\tClassificationRaxML\tSequence(s)\n";
 		print T "VIRUSname\t%dissimilarity\tAbundance\tN°reads\tGInum\tAlignmentPosition_MegaBlast\tVIRUS_closest_MegaBlast\tPool\tTissu\tPrimer\tLength\tAlignmentPositionBlastN_start:stop(length)\tVIRUS_closest_Blast\tBlastN_Classification\tRaxML_closest_PV\tRaxML_Classification\tSequence(s)\n";
 	}
 	else{
@@ -2252,8 +2253,8 @@ sub treatputative{
 		chomp($_);
 		my $l=$_;
 		my @tab=split /\t/,$l;
-		if(defined($hacctohpv{$tab[1]})){
-			$queryclose{$tab[0]}=$hacctohpv{$tab[1]};	#1005VIRUSput.1	MF588684	Betapapillomavirus
+		if(defined($hacctohpyv{$tab[1]})){
+			$queryclose{$tab[0]}=$hacctohpyv{$tab[1]};	#1005VIRUSput.1	MF588684	Betapapillomavirus
 		}
 		else{
 			$queryclose{$tab[0]}="NA";
@@ -2281,13 +2282,13 @@ sub treatputative{
 		my $nbread="";
 		my $gi="";
 		my $alig_pos_mega="";
-		my $hpv_mega="";
+		my $hpyv_mega="";
 		my $pool="";
 		my $tissu="";
 		my $primer="";
 		my $len="";
 		my $align_pos_blastn="";
-		my $hpv_blast="";
+		my $hpyv_blast="";
 		my $classification_blastn="";
 		my $seq="";
 		
@@ -2305,13 +2306,13 @@ sub treatputative{
 			$nbread=$tab[3];
 			$gi=$tab[4];
 			$alig_pos_mega=$tab[5];
-			$hpv_mega=$tab[6];
+			$hpyv_mega=$tab[6];
 			$pool=$tab[7];
 			$tissu=$tab[8];
 			$primer=$tab[9];
 			$len=$tab[10];
 			$align_pos_blastn=$tab[11];
-			$hpv_blast=$tab[12];
+			$hpyv_blast=$tab[12];
 			$classification_blastn=$tab[13];
 			$seq="";
 			$raxml_class="";
@@ -2352,8 +2353,8 @@ sub treatputative{
 				$raxml_class=join('/',@taxtmp);
 				$raxml_closest=join('/',@closetmp);
 				
-				if($hpv_blast=~/\//){	#more than one seq
-					my @tabtmp=split(/\//,$hpv_blast);
+				if($hpyv_blast=~/\//){	#more than one seq
+					my @tabtmp=split(/\//,$hpyv_blast);
 					$blastn_closest=$tabtmp[0];
 				}
 				if($classification_blastn=~/\//){	#more than one seq
@@ -2369,7 +2370,7 @@ sub treatputative{
 				$idselected=$id;
 				$raxml_class=$querytax{$idselected};
 				$raxml_closest=$queryclose{$idselected};
-				$blastn_closest=$hpv_blast;
+				$blastn_closest=$hpyv_blast;
 				$blastn_species=$classification_blastn;
 			}
 		}
@@ -2381,11 +2382,11 @@ sub treatputative{
 			$nbread=$tab[3];
 			$gi=$tab[4];
 			$alig_pos_mega=$tab[5];
-			$hpv_mega=$tab[6];
+			$hpyv_mega=$tab[6];
 			$pool=$tab[7];
 			$len=$tab[8];
 			$align_pos_blastn=$tab[9];
-			$hpv_blast=$tab[10];
+			$hpyv_blast=$tab[10];
 			$classification_blastn=$tab[11];
 			$seq="";
 			$raxml_class="";
@@ -2419,8 +2420,8 @@ sub treatputative{
 				$raxml_class=join('/',@taxtmp);
 				$raxml_closest=join('/',@closetmp);
 				
-				if($hpv_blast=~/\//){	#more than one seq
-					my @tabtmp=split(/\//,$hpv_blast);
+				if($hpyv_blast=~/\//){	#more than one seq
+					my @tabtmp=split(/\//,$hpyv_blast);
 					$blastn_closest=$tabtmp[0];
 				}
 				if($classification_blastn=~/\//){	#more than one seq
@@ -2436,7 +2437,7 @@ sub treatputative{
 				$idselected=$id;
 				$raxml_class=$querytax{$idselected};
 				$raxml_closest=$queryclose{$idselected};
-				$blastn_closest=$hpv_blast;
+				$blastn_closest=$hpyv_blast;
 				$blastn_species=$classification_blastn;
 			}
 			
@@ -2444,7 +2445,7 @@ sub treatputative{
 		
 		##to modifiy
 		
-		#~ $@{$hnewtable{$tissu{$pool}}{$cattmp}{$hpvcat{$hpvname}}{$hpvname}}[$poolsid{$pool}]+=$htarget{$pool}{'known'}{$hpvname};
+		#~ $@{$hnewtable{$tissu{$pool}}{$cattmp}{$hpyvcat{$hpyvname}}{$hpyvname}}[$poolsid{$pool}]+=$htarget{$pool}{'known'}{$hpyvname};
 		
 		my $genus="";
 		#~ print $querytax{$idselected}." rax\n";
@@ -2481,7 +2482,7 @@ sub treatputative{
 			$genus_blastn="Unclassified";
 		}
 		
-		#{$tissu}{$hpvgenus}{$hpvspecies}{$hpvname}=@(nbreads_pool1,nbreads_pool2,...,nbreads_pool8)
+		#{$tissu}{$hpyvgenus}{$hpyvspecies}{$hpyvname}=@(nbreads_pool1,nbreads_pool2,...,nbreads_pool8)
 		#~ print $tissu."\n";
 		#~ print $genus."\n";
 		#~ if(!(defined($genus))){
@@ -2580,10 +2581,10 @@ sub treatputative{
 		}
 		
 		if($boolean_infofile eq "true"){
-			print T "$id\t$perc_dis\t$abun\t$nbread\t$gi\t$alig_pos_mega\t$hpv_mega\t$pool\t$tissu\t$primer\t$len\t$align_pos_blastn\t$hpv_blast\t$classification_blastn\t$raxml_closest\t$raxml_class\t$seq\n";
+			print T "$id\t$perc_dis\t$abun\t$nbread\t$gi\t$alig_pos_mega\t$hpyv_mega\t$pool\t$tissu\t$primer\t$len\t$align_pos_blastn\t$hpyv_blast\t$classification_blastn\t$raxml_closest\t$raxml_class\t$seq\n";
 		}
 		else{
-			print T "$id\t$perc_dis\t$abun\t$nbread\t$gi\t$alig_pos_mega\t$hpv_mega\t$primer\t$len\t$align_pos_blastn\t$hpv_blast\t$classification_blastn\t$raxml_closest\t$raxml_class\t$seq\n";
+			print T "$id\t$perc_dis\t$abun\t$nbread\t$gi\t$alig_pos_mega\t$hpyv_mega\t$primer\t$len\t$align_pos_blastn\t$hpyv_blast\t$classification_blastn\t$raxml_closest\t$raxml_class\t$seq\n";
 		}
 		
 	}
@@ -2592,7 +2593,7 @@ sub treatputative{
 
 
 #################################################			###		RAXML		###
-##	WRITE TABLE HPV DIVERSITY BY TISSUE TYPE	##
+##	WRITE TABLE HPYV DIVERSITY BY TISSUE TYPE	##
 ##################################################
 ##				!!	NEW VERSION	!!				##
 ##################################################
@@ -2624,7 +2625,7 @@ foreach my $t (sort keys %hnewtable){		##TISSU
 	if($boolean_infofile eq "true"){
 		open(OUT,">".$outputdir."/diversityByTissu_".$t."_RaxML.csv") or die "$!";
 		print OUT "TISSUE\tFamily\tGenus\tSpecies\tRelated\t".join("\t",sort @primertmp)."\tPool\n";		#vérifier ordre primertmp
-		print OUT $t."\tPapillomaviridae\t";
+		print OUT $t."\tPolyomaviridae\t";
 		$kronaname="krona_".$t."_RaxML";
 		open(KRO,">".$krona."/krona_".$t."_RaxML.txt") or die "$!";
 	}
@@ -2715,7 +2716,7 @@ foreach my $t (sort keys %hnewtable){		##TISSU
 				
 				print KRO $total_krona."\t".$t."\t".$g."\t".$s."\n";
 				
-				$hoverall{'Papillomaviridae'}{$g}{$s}{$n}{$t}+=$total_krona;
+				$hoverall{'Polyomaviridae'}{$g}{$s}{$n}{$t}+=$total_krona;
 				
 				#~ my %hoverall=();	# {Family}{Genus}{Species}{virusname}{tissu}=nb reads
 
@@ -2733,7 +2734,7 @@ foreach my $t (sort keys %hnewtable){		##TISSU
 
 
 ##########################################
-##	WRITE TABLE HPV DIVERSITY OVERALL	##
+##	WRITE TABLE HPYV DIVERSITY OVERALL	##
 ##########################################
 $ff=0;
 $fg=0;
@@ -2796,7 +2797,7 @@ foreach my $f (sort keys %hoverall){		#For each family
 							## To display the pool concerned	$@{$hnewtable{$tissu{$pool}}{$family}{$genus}{$species}{$virusname}}[$poolsid{$pool}]=$htarget{$pool}{'new'}{$virusname};
 						my $tabtmp;
 						#~ $@{$hnewtable{$tissu}{$genus}{$querytax{$idselected}}{$queryclose{$idselected}}}[$poolsid{$pool}]+=$nbread;
-						#{$tissu}{$hpvgenus}{$hpvspecies}{$hpvname}=@(nbreads_pool1,nbreads_pool2,...,nbreads_pool8)
+						#{$tissu}{$hpyvgenus}{$hpyvspecies}{$hpyvname}=@(nbreads_pool1,nbreads_pool2,...,nbreads_pool8)
 						
 						#~ my $tabtmp=$@{$hnewtable{$t}{$g}{$s}{$n}};
 						
@@ -2846,7 +2847,7 @@ close(OUTALL);
 
 
 #################################################			###		BLASTN		###
-##	WRITE TABLE HPV DIVERSITY BY TISSUE TYPE	##
+##	WRITE TABLE HPYV DIVERSITY BY TISSUE TYPE	##
 ##################################################
 ##				!!	NEW VERSION	!!				##
 ##################################################
@@ -2878,7 +2879,7 @@ foreach my $t (sort keys %hnewtable_blastn){		##TISSU
 	if($boolean_infofile eq "true"){
 		open(OUT,">".$outputdir."/diversityByTissu_".$t."_BlastN.csv") or die "$!";
 		print OUT "TISSUE\tFamily\tGenus\tSpecies\tRelated\t".join("\t",sort @primertmp)."\tPool\n";		#vérifier ordre primertmp
-		print OUT $t."\tPapillomaviridae\t";
+		print OUT $t."\tPolyomaviridae\t";
 		$kronaname="krona_".$t."_BlastN";
 		open(KRO,">".$krona."/krona_".$t."_BlastN.txt") or die "$!";
 	}
@@ -2969,7 +2970,7 @@ foreach my $t (sort keys %hnewtable_blastn){		##TISSU
 				
 				print KRO $total_krona."\t".$t."\t".$g."\t".$s."\n";
 				
-				$hoverall_blastn{'Papillomaviridae'}{$g}{$s}{$n}{$t}+=$total_krona;
+				$hoverall_blastn{'Polyomaviridae'}{$g}{$s}{$n}{$t}+=$total_krona;
 				
 				#~ my %hoverall=();	# {Family}{Genus}{Species}{virusname}{tissu}=nb reads
 
@@ -2988,7 +2989,7 @@ foreach my $t (sort keys %hnewtable_blastn){		##TISSU
 
 
 ##########################################			###		BLASTN		###
-##	WRITE TABLE HPV DIVERSITY OVERALL	##
+##	WRITE TABLE HPYV DIVERSITY OVERALL	##
 ##########################################
 $ff=0;
 $fg=0;
@@ -3051,7 +3052,7 @@ foreach my $f (sort keys %hoverall_blastn){		#For each family
 							## To display the pool concerned	$@{$hnewtable{$tissu{$pool}}{$family}{$genus}{$species}{$virusname}}[$poolsid{$pool}]=$htarget{$pool}{'new'}{$virusname};
 						my $tabtmp;
 						#~ $@{$hnewtable{$tissu}{$genus}{$querytax{$idselected}}{$queryclose{$idselected}}}[$poolsid{$pool}]+=$nbread;
-						#{$tissu}{$hpvgenus}{$hpvspecies}{$hpvname}=@(nbreads_pool1,nbreads_pool2,...,nbreads_pool8)
+						#{$tissu}{$hpyvgenus}{$hpyvspecies}{$hpyvname}=@(nbreads_pool1,nbreads_pool2,...,nbreads_pool8)
 						
 						#~ my $tabtmp=$@{$hnewtable{$t}{$g}{$s}{$n}};
 						
@@ -3130,7 +3131,7 @@ foreach my $pool (sort keys %known){
 ######################################
 print OUT "\nTable 10 - NEW virus genus level - RaxML\n";
 print OUT "Pool";
-##	WRITE TABLE NEW HPV CATEGORY
+##	WRITE TABLE NEW HPYV CATEGORY
 foreach my $cat (sort @catnew){
 	print OUT "\t".$cat;
 }
@@ -3176,7 +3177,7 @@ foreach my $pool (sort keys %known_blastn){
 ######################################
 print OUT "\nTable 12 - NEW virus genus level - BlastN\n";
 print OUT "Pool";
-##	WRITE TABLE NEW HPV CATEGORY
+##	WRITE TABLE NEW HPYV CATEGORY
 foreach my $cat (sort @catnew_blastn){
 	print OUT "\t".$cat;
 }
@@ -3234,19 +3235,19 @@ foreach my $file (`ls $outputdir/table_putative_*_VIRUS_RaxML.txt`){
 			my $nbread=$tab[3];
 			my $gi=$tab[4];
 			my $alig_pos_mega=$tab[5];
-			my $hpv_mega=$tab[6];
+			my $hpyv_mega=$tab[6];
 			my $pool=$tab[7];
 			my $tissu=$tab[8];
 			my $primer=$tab[9];
 			my $len=$tab[10];	#OK
 			my $align_pos_blastn=$tab[11];
-			my $hpv_blast=$tab[12];
+			my $hpyv_blast=$tab[12];
 			my $classification_blastn=$tab[13];
 			my $raxml_closest=$tab[14];	#OK
 			my $raxml_class=$tab[15];
 			my $seq=$tab[16];
 			
-			my @thpv_blast=split(/\//,$hpv_blast);
+			my @thpyv_blast=split(/\//,$hpyv_blast);
 			my @tclassification_blastn=split(/\//,$classification_blastn);
 			
 			my @traxml_closest=split(/\//,$raxml_closest);
@@ -3256,21 +3257,21 @@ foreach my $file (`ls $outputdir/table_putative_*_VIRUS_RaxML.txt`){
 			
 			my $max=getindexmax(\@tlen);
 			
-			$hpv_blast=$thpv_blast[$max];
+			$hpyv_blast=$thpyv_blast[$max];
 			$classification_blastn=$tclassification_blastn[$max];
 			$raxml_closest=$traxml_closest[$max];
 			$raxml_class=$traxml_class[$max];
 			
 			my $t=$tissu;
 			
-			my $hpv="";
-			if($hpv_blast=~/(.+)\(.+\)$/i){
-				$hpv=$1;
+			my $hpyv="";
+			if($hpyv_blast=~/(.+)\(.+\)$/i){
+				$hpyv=$1;
 			}
 			else{
-				$hpv=$hpv_blast;
+				$hpyv=$hpyv_blast;
 			}
-			#~ print $hpv."\n";
+			#~ print $hpyv."\n";
 			#~ exit;
 			
 			my $genusrax=getgenus($raxml_class);
@@ -3278,8 +3279,8 @@ foreach my $file (`ls $outputdir/table_putative_*_VIRUS_RaxML.txt`){
 			
 			
 			##	BLASTN
-						#NEW	HPV1	AK	Primer
-			$hreadsmega{$group}{$hpv}{$t}{$primer}+=$nbread;
+						#NEW	HPYV1	AK	Primer
+			$hreadsmega{$group}{$hpyv}{$t}{$primer}+=$nbread;
 			
 			$hreadsmega_genus{$group}{$genusblast}{$t}{$primer}+=$nbread;
 			
@@ -3290,11 +3291,11 @@ foreach my $file (`ls $outputdir/table_putative_*_VIRUS_RaxML.txt`){
 				$hseqcountmega_genus{$group}{$genusblast}{$t}{$primer}++;
 			}
 			
-			#~ print $group."\t".$hpv."\t".$t."\t".$primer."\n";
+			#~ print $group."\t".$hpyv."\t".$t."\t".$primer."\n";
 			
-			$hinfomega{$hpv}=$classification_blastn;
+			$hinfomega{$hpyv}=$classification_blastn;
 			
-			push(@{$htypemega_genus{$group}{$genusblast}},$hpv);
+			push(@{$htypemega_genus{$group}{$genusblast}},$hpyv);
 			
 			
 			
@@ -3313,7 +3314,7 @@ foreach my $file (`ls $outputdir/table_putative_*_VIRUS_RaxML.txt`){
 			
 			$hinforax{$raxml_closest}=$raxml_class;
 			
-			#~ print $group."\t".$hpv."\t".$t."\t".$nbread."\t".$raxml_closest."\n";
+			#~ print $group."\t".$hpyv."\t".$t."\t".$nbread."\t".$raxml_closest."\n";
 			
 			push(@{$htyperax_genus{$group}{$genusrax}},$raxml_closest);
 			
@@ -3328,7 +3329,7 @@ if(($bol_new_empty eq "F") && ($bol_known_empty eq "F")){
 	for my $group (sort keys %hreadsmega_genus){
 		open(OUT, ">".$outputdir."/Table_Genus_presence_".$group."_tissu_BlastN.txt") or die "$! : $outputdir/Table_Genus_presence_${group}_tissu_BlastN.txt\n";
 		
-		print OUT "HPV genus\tUnique virus species\t";
+		print OUT "HPYV genus\tUnique virus species\t";
 		foreach my $t (@tissues){
 			print OUT $t;
 			for (my $p=0; $p<=$#primers; $p++){
@@ -3375,7 +3376,7 @@ if(($bol_new_empty eq "F") && ($bol_known_empty eq "F")){
 	for my $group (sort keys %hreadsrax_genus){
 		open(OUT, ">".$outputdir."/Table_Genus_presence_".$group."_tissu_RaxML.txt") or die "$! : $outputdir/Table_Genus_presence_${group}_tissu_RaxML.txt\n";
 		
-		print OUT "HPV genus\tUnique virus species\t";
+		print OUT "HPYV genus\tUnique virus species\t";
 		foreach my $t (@tissues){
 			print OUT $t;
 			for (my $p=0; $p<=$#primers; $p++){
@@ -3420,7 +3421,7 @@ if(($bol_new_empty eq "F") && ($bol_known_empty eq "F")){
 
 
 	for my $group (sort keys %hreadsmega){
-		open(OUT, ">".$outputdir."/Table_HPV_presence_".$group."_tissu_BlastN.txt") or die "$! : $outputdir/Table_HPV_presence_${group}_tissu_BlastN.txt\n";
+		open(OUT, ">".$outputdir."/Table_HPyV_presence_".$group."_tissu_BlastN.txt") or die "$! : $outputdir/Table_HPyV_presence_${group}_tissu_BlastN.txt\n";
 		
 		print OUT "Name\tClassification\t";
 		foreach my $t (@tissues){
@@ -3439,15 +3440,15 @@ if(($bol_new_empty eq "F") && ($bol_known_empty eq "F")){
 		}
 		print OUT "\n";
 		
-		for my $hpv (sort keys %{$hreadsmega{$group}}){
+		for my $hpyv (sort keys %{$hreadsmega{$group}}){
 			
-			print OUT $hpv."\t".$hinfomega{$hpv}."\t";
+			print OUT $hpyv."\t".$hinfomega{$hpyv}."\t";
 			
 			foreach my $t (@tissues){
 				foreach my $p (@primers){
 					my $reads="-";
-					if((defined($hreadsmega{$group}{$hpv}{$t}{$p})) && ($hreadsmega{$group}{$hpv}{$t}{$p}!~/^\s*$/)){
-						$reads=$hreadsmega{$group}{$hpv}{$t}{$p};
+					if((defined($hreadsmega{$group}{$hpyv}{$t}{$p})) && ($hreadsmega{$group}{$hpyv}{$t}{$p}!~/^\s*$/)){
+						$reads=$hreadsmega{$group}{$hpyv}{$t}{$p};
 					}
 					print OUT $reads."\t";
 				}
@@ -3458,7 +3459,7 @@ if(($bol_new_empty eq "F") && ($bol_known_empty eq "F")){
 	}
 		
 	for my $group (sort keys %hreadsrax){
-		open(OUT, ">".$outputdir."/Table_HPV_presence_".$group."_tissu_RaxML.txt") or die "$! : $outputdir/Table_HPV_presence_${group}_tissu_RaxML.txt\n";
+		open(OUT, ">".$outputdir."/Table_HPyV_presence_".$group."_tissu_RaxML.txt") or die "$! : $outputdir/Table_HPyV_presence_${group}_tissu_RaxML.txt\n";
 		
 		print OUT "Name\tClassification\t";
 		foreach my $t (@tissues){
@@ -3477,15 +3478,15 @@ if(($bol_new_empty eq "F") && ($bol_known_empty eq "F")){
 		}
 		print OUT "\n";
 		
-		for my $hpv (sort keys %{$hreadsrax{$group}}){
+		for my $hpyv (sort keys %{$hreadsrax{$group}}){
 			
-			print OUT $hpv."\t".$hinforax{$hpv}."\t";
+			print OUT $hpyv."\t".$hinforax{$hpyv}."\t";
 			
 			foreach my $t (@tissues){
 				foreach my $p (@primers){
 					my $reads="-";
-					if((defined($hreadsrax{$group}{$hpv}{$t}{$p})) && ($hreadsrax{$group}{$hpv}{$t}{$p}!~/^\s*$/)){
-						$reads=$hreadsrax{$group}{$hpv}{$t}{$p};
+					if((defined($hreadsrax{$group}{$hpyv}{$t}{$p})) && ($hreadsrax{$group}{$hpyv}{$t}{$p}!~/^\s*$/)){
+						$reads=$hreadsrax{$group}{$hpyv}{$t}{$p};
 					}
 					print OUT $reads."\t";
 				}
@@ -3547,7 +3548,7 @@ sub parseRaxMLv2{
 	my ($raxtree,$info,$out)=@_;
 	
 	my %hidentical=();
-	open(INFO, $info) or die "$! : $info\n";	#IMPORTANT WARNING: Sequences 97HPVput and 44HPVput are exactly identical
+	open(INFO, $info) or die "$! : $info\n";	#IMPORTANT WARNING: Sequences 97HPYVput and 44HPYVput are exactly identical
 	while(<INFO>){
 		chomp($_);
 		my $line=$_;
@@ -3572,7 +3573,7 @@ sub parseRaxMLv2{
 	my $ancestor;
 	undef($ancestor);
 
-	my %hquerytohpv=();
+	my %hquerytohpyv=();
 
 	foreach my $node (@taxa){
 		if($node->id=~/^QUERY/){
@@ -3592,12 +3593,12 @@ sub parseRaxMLv2{
 					
 					if(!(defined($ancestor))){
 						#~ print "No ancestor for ".$node->id."\n";
-						$hquerytohpv{$node->id}="NA";		# Alors pas dans l'arbre...
+						$hquerytohpyv{$node->id}="NA";		# Alors pas dans l'arbre...
 					}
 					
 				}
 				else{
-					$hquerytohpv{$node->id}=$childs[0]->id;
+					$hquerytohpyv{$node->id}=$childs[0]->id;
 					undef($ancestor);
 				}
 			}
@@ -3605,13 +3606,13 @@ sub parseRaxMLv2{
 	}
 	
 	open(OUT,">".$out) or die "$! : $out\n";
-	foreach my $q (sort keys %hquerytohpv){
+	foreach my $q (sort keys %hquerytohpyv){
 		my $acc="";
 		my $tax="";
-		if((defined($hquerytohpv{$q}))){
-			$acc=$hquerytohpv{$q};
-			if((defined($hacctotax{$hquerytohpv{$q}}))){
-				$tax=$hacctotax{$hquerytohpv{$q}};				#Modifier ce n'est plus acc
+		if((defined($hquerytohpyv{$q}))){
+			$acc=$hquerytohpyv{$q};
+			if((defined($hacctotax{$hquerytohpyv{$q}}))){
+				$tax=$hacctotax{$hquerytohpyv{$q}};				#Modifier ce n'est plus acc
 			}
 			else{
 				$tax="Unclassified";
@@ -3630,10 +3631,10 @@ sub parseRaxMLv2{
 		my $q=$hidentical{$iden};
 		my $acc="";
 		my $tax="";
-		if((defined($hquerytohpv{$iden}))){
-			$acc=$hquerytohpv{$iden};
-			if((defined($hacctotax{$hquerytohpv{$iden}}))){
-				$tax=$hacctotax{$hquerytohpv{$iden}};
+		if((defined($hquerytohpyv{$iden}))){
+			$acc=$hquerytohpyv{$iden};
+			if((defined($hacctotax{$hquerytohpyv{$iden}}))){
+				$tax=$hacctotax{$hquerytohpyv{$iden}};
 			}
 			else{
 				$tax="Unclassified";
@@ -3656,10 +3657,10 @@ sub parseRaxMLv2{
 #SequIO object to blast
 #Blast output file name
 #return Bio::SearchIO object result
-sub HPVblastn{
+sub HPYVblastn{
 	my $seqfun=shift;
 	my $outfun=shift;
-	my $resultfun = $fac->blastn( -query => $seqfun,										#Faire le blast avec la sequence $seq -db_data => '/data/robitaillea/blastHPVdb/HPV.fasta',	
+	my $resultfun = $fac->blastn( -query => $seqfun,										#Faire le blast avec la sequence $seq -db_data => '/data/robitaillea/blastHPYVdb/HPYV.fasta',	
 			 -outfile => $outfun, 
 			 # -db_data => '/home/eugloh/Documents/STAGE/AmpiconFinder/PyVAmpliconFinder/databases/References.fasta',
 			 -method_args => [	-num_alignments => '1',			#	recupération de 50 alignements
@@ -3696,11 +3697,11 @@ sub reverse_complement_IUPAC {
         return $revcomp;
 }
 
-#~ my $res=longuestFirst(\@lentemp,\@hpvclosest,\classification,\@start_stop_len_hit,\@tseqtmpfun);
+#~ my $res=longuestFirst(\@lentemp,\@hpyvclosest,\classification,\@start_stop_len_hit,\@tseqtmpfun);
 
 sub longuestFirst {
 	my $tlen=shift;
-	my $thpv=shift;
+	my $thpyv=shift;
 	my $tclass=shift;
 	my $tpos=shift;
 	my $tseq=shift;
@@ -3739,7 +3740,7 @@ sub longuestFirst {
 	#~ }
 	
 	my @tlenfun=();
-	my @thpvfun=();
+	my @thpyvfun=();
 	my @tclassfun=();
 	my @posfun=();
 	my @tseqfun=();
@@ -3748,21 +3749,21 @@ sub longuestFirst {
 		#~ print $i."\n";
 		#~ print $$tlen[$i]." la \n";
 		push(@tlenfun,$$tlen[$i]);			## 
-		push(@thpvfun,$$thpv[$i]);
+		push(@thpyvfun,$$thpyv[$i]);
 		push(@tclassfun,$$tclass[$i]);
 		push(@posfun,$$tpos[$i]);
 		push(@tseqfun,$$tseq[$i]);
 	}
 	
 	my $lenfun=join("/",@tlenfun); 
-	my $hpvfun=join("/",@thpvfun); 
+	my $hpyvfun=join("/",@thpyvfun); 
 	my $classfun=join("/",@tclassfun); 
 	my $posfun=join("/",@posfun); 
 	my $seqfun=join("\t",@tseqfun);
 	
 	my @res=();
 	push(@res,$lenfun);
-	push(@res,$hpvfun);
+	push(@res,$hpyvfun);
 	push(@res,$classfun);
 	push(@res,$posfun);
 	push(@res,$seqfun);
@@ -3771,21 +3772,21 @@ sub longuestFirst {
 }
 
 sub getgenus{
-	my $hpvname=shift;
+	my $hpyvname=shift;
 	my $genus="";
-	if($hpvname=~/^alpha/i){
+	if($hpyvname=~/^alpha/i){
 		$genus="Alphapolyomavirus";
 	}
-	elsif($hpvname=~/^beta/i){
+	elsif($hpyvname=~/^beta/i){
 		$genus="Betapolyomavirus";
 	}
-	elsif($hpvname=~/^gamma/i){
+	elsif($hpyvname=~/^gamma/i){
 		$genus="Gammapolyomavirus";
 	}
-	elsif($hpvname=~/^delta/i){
+	elsif($hpyvname=~/^delta/i){
 		$genus="Deltapolyomavirus";
 	}
-	elsif($hpvname=~/^unclass/i){
+	elsif($hpyvname=~/^unclass/i){
 		$genus="Unassigned";
 	}
 	else{
