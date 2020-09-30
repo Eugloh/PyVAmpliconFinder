@@ -1,7 +1,0 @@
-PyVAmpliconFinder_dev.sh \
-	 -b nt \
-	 -s NGSDEEP \
-	 -d data \
-	 -o results \
-	 -f data/InfoFile_Test \
-	 -t 1

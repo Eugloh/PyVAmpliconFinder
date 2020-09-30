@@ -15,7 +15,7 @@ results
 batch_output/*
 tmp/*
 all/*
-files/*
+files
 .~lock.infoAboutFiles.csv#
 PyVAmpliconFinder_step2_dev2.pl
 SFE
