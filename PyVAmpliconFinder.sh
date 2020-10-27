@@ -286,7 +286,11 @@ then
 
 	##	Chimerics removal
 	echo -e "~~	ChimericSeqRemoval	~~";
+<<<<<<< HEAD
+	find . -name "${suffix}*_lin_der.fasta" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'vsearch --quiet --uchime_denovo '${tmpdir}/'${0} --sizein --threads 1 --relabel $(basename "${0/_lin_der.fasta/}") --sizeout --xsize --nonchimeras '${tmpdir}/'$(basename "${0/_lin_der.fasta/}")_no_chim.fasta --log $(basename "${0/_lin_der.fasta/}")_chimeria.log &>> '${logfile}';';
+=======
 	find . -name "${suffix}*_lin_der.fasta" | xargs --max-args=1 --max-procs=${threads} -- bash -c 'vsearch --quiet --uchime_denovo '${tmpdir}/'${0} --sizein --threads '${threads}' --relabel $(basename "${0/_lin_der.fasta/}") --sizeout --xsize --nonchimeras '${tmpdir}/'$(basename "${0/_lin_der.fasta/}")_no_chim.fasta --log $(basename "${0/_lin_der.fasta/}")_chimeria.log &>> '${logfile}';';
+>>>>>>> 42a4a289936a8b3ffe1fdb5584e12143a8273b30
 	
 
 	##	Clustering
@@ -344,14 +348,22 @@ cd ${dir};
 
 if [ ! -d ${working_dir}"/analysis_new" ]
 then
+<<<<<<< HEAD
+	chmod +x $BASEDIR/PyVAmpliconFinder_step2.pl;
+=======
 	chmod +x $BASEDIR/PyVAmpliconFinder_step2_dev.pl;
+>>>>>>> 42a4a289936a8b3ffe1fdb5584e12143a8273b30
 	# echo ${blastdir};
 	# echo ${working_dir};
 	# echo ${suffix};
 	# echo ${outputdir};
 	# echo ${threads};
 	# echo ${info};
+<<<<<<< HEAD
+	perl $BASEDIR/PyVAmpliconFinder_step2.pl -i ${blastdir} -o ${working_dir} -s ${suffix} -d ${outputdir} -t ${threads} -f ${info};
+=======
 	perl $BASEDIR/PyVAmpliconFinder_step2_dev.pl -i ${blastdir} -o ${working_dir} -s ${suffix} -d ${outputdir} -t ${threads} -f ${info};
+>>>>>>> 42a4a289936a8b3ffe1fdb5584e12143a8273b30
 else
 	echo -e "Advanced analysis already done";
 	#echo -e "Advanced analysis already done" >> $logfile;	

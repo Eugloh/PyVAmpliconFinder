@@ -460,11 +460,19 @@ sub loadblastresult{
 			
 			##	Parsing of the ID
 			foreach my $p (sort @pools){
+<<<<<<< HEAD
+				if($qid=~/^($p)\d+;clusterid=\d+;size=(\d+)$/){			#pool1-skin-pathogen_S1_L0011;clusterid=0;size=170654
+					$pool=$1;
+					$reads=$2;
+				}
+				elsif($qid=~/^(Undertermined)\d+;clusterid=\d+;size=(\d+)$/){
+=======
 				if($qid=~/^($p)\d+;size=(\d+);*$/){
 					$pool=$1;
 					$reads=$2;
 				}
 				elsif($qid=~/^(Undertermined)\d+;size=(\d+);*$/){
+>>>>>>> 42a4a289936a8b3ffe1fdb5584e12143a8273b30
 					$pool=$1;
 					$reads=$2;
 				}
@@ -1378,7 +1386,11 @@ sub concat_sequence{
 			chomp($qid);
 			
 			##	Parsing of the ID
+<<<<<<< HEAD
+			if($qid=~/^($sampleName)\S+;clusterid=\d+;size=(\d+)$/){
+=======
 			if($qid=~/^($sampleName)\S+;size=(\d+);*$/){
+>>>>>>> 42a4a289936a8b3ffe1fdb5584e12143a8273b30
 				$pool=$1;
 				$reads=$2;
 			}
