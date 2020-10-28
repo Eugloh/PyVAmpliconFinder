@@ -311,25 +311,25 @@ sub readinfofile{
 
 #~ cat <(sed -e '1d' download_animal_RefClone_*.csv | awk -v OFS="\t" -F"\t" '{print $1, $9, $3}') <(sed -e '1d' download_human_RefClone_*.csv | awk -v OFS="\t" -F"\t" '{print $1, $5, $2}') > pave_table.txt
 
-my $table="$dirname/raxml/PyV_table4.txt";
+my $table="$dirname/raxml/PyV_table.txt";
 
 # \s match white space 
 
 my %hacctohpyv=();
 my %hacctotax=();
 my %hhpyvtotax=();
-open(T, $table) or die "$! : $table\n";	#NC_022519	AelPyV1	Betapolyomavirus
+open(T, $table) or die "$! : $table\n";	#NC_022519_AelPyV1	AelPyV1	Betapolyomavirus
 while(<T>){
 	chomp($_);
 	my @tab=split(/\t/,$_);
 	if((defined($tab[0])) && $tab[0]!~/^\s*$/){
-		$hacctohpyv{$tab[1]}=$tab[0];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
+		$hacctohpyv{$tab[1]}=$tab[0];		#ex	NC_022519_AelPyV1	AelPyV1	Betapolyomavirus
 	}
 	if((defined($tab[2])) && $tab[2]!~/^\s*$/){
-		$hacctotax{$tab[1]}=$tab[2];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
+		$hacctotax{$tab[1]}=$tab[2];		#ex	NC_022519_AelPyV1	AelPyV1	Betapolyomavirus
 	}
 	if((defined($tab[0])) && $tab[0]!~/^\s*$/){
-		$hhpyvtotax{$tab[0]}=$tab[2];		#ex	BPV7	DQ217793	Dyoxipapillomavirus 1
+		$hhpyvtotax{$tab[0]}=$tab[2];		#ex	NC_022519_AelPyV1	AelPyV1	Betapolyomavirus
 	}
 
 }
